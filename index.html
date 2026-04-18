@@ -1,0 +1,630 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>DNT_OF — Developer</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Noto+Sans+SC:wght@300;400;700&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --bg: #0a0a0f; --panel: #111118; --border: #1e1e2e;
+      --accent: #00e5ff; --accent2: #7c3aed;
+      --text: #e2e8f0; --muted: #64748b;
+      --sb: #1b9aef; --sd: #1b2838; --sm: #2a475e;
+      --steam-bg-img: none;
+      --steam-bg-color: #1b2838;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'Noto Sans SC', sans-serif;
+      min-height: 100vh;
+      overflow-x: hidden;
+      transition: background 0.8s ease;
+    }
+
+    /* ── DYNAMIC BACKGROUND ── */
+    #bg-layer {
+      position: fixed; inset: 0; z-index: 0;
+      background-image: var(--steam-bg-img);
+      background-size: cover;
+      background-position: center top;
+      opacity: 0;
+      transition: opacity 1.2s ease;
+      filter: blur(2px) brightness(0.22) saturate(0.7);
+    }
+    #bg-layer.loaded { opacity: 1; }
+
+    body::before {
+      content: ''; position: fixed; inset: 0; pointer-events: none; z-index: 1;
+      background-image:
+        linear-gradient(rgba(0,229,255,.025) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(0,229,255,.025) 1px, transparent 1px);
+      background-size: 40px 40px;
+    }
+    body::after {
+      content: ''; position: fixed; inset: 0; pointer-events: none; z-index: 1;
+      background: repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(0,0,0,.06) 2px, rgba(0,0,0,.06) 4px);
+    }
+
+    .orb { position: fixed; border-radius: 50%; filter: blur(130px); opacity: .10; pointer-events: none; z-index: 0; }
+    .orb-1 { width: 600px; height: 600px; background: var(--accent2); top: -200px; left: -200px; }
+    .orb-2 { width: 500px; height: 500px; background: var(--accent); bottom: -100px; right: -100px; }
+
+    .cursor-glow {
+      width: 320px; height: 320px; border-radius: 50%;
+      background: radial-gradient(circle, rgba(0,229,255,.055), transparent 70%);
+      position: fixed; pointer-events: none; z-index: 0;
+      transform: translate(-50%,-50%); transition: left .08s, top .08s;
+    }
+
+    .page { position: relative; z-index: 2; max-width: 860px; margin: 0 auto; padding: 60px 24px 80px; }
+
+    /* ── HEADER ── */
+    header { display: flex; align-items: center; gap: 32px; margin-bottom: 64px; animation: fadeUp .8s ease both; }
+    .avatar-ring {
+      width: 96px; height: 96px; border-radius: 50%; flex-shrink: 0;
+      background: conic-gradient(var(--accent), var(--accent2), var(--accent));
+      padding: 2px; animation: spin 8s linear infinite;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+    @keyframes spin-reverse { to { transform: rotate(-360deg); } }
+
+    .avatar-inner {
+      width: 100%; height: 100%; border-radius: 50%; background: var(--panel); overflow: hidden;
+      display: flex; align-items: center; justify-content: center;
+      font-family: 'Space Mono', monospace; font-size: 2rem; font-weight: 700; color: var(--accent);
+      animation: spin-reverse 8s linear infinite;
+    }
+    .avatar-inner img { width: 100%; height: 100%; object-fit: cover; border-radius: 50%; }
+    .header-text h1 { font-family: 'Space Mono', monospace; font-size: clamp(1.8rem,5vw,2.8rem); font-weight: 700; letter-spacing: -1px; color: #fff; }
+    .header-text h1 span { color: var(--accent); }
+    .tagline { font-size: .9rem; color: var(--muted); margin-top: 6px; font-family: 'Space Mono', monospace; }
+    .tagline::before { content: '> '; color: var(--accent); }
+    .header-sub { font-size: .8rem; color: var(--muted); margin-top: 4px; font-family: 'Space Mono', monospace; }
+    .header-sub span { color: #a78bfa; }
+
+    /* ── SECTIONS ── */
+    section { margin-bottom: 48px; animation: fadeUp .8s ease both; }
+    section:nth-child(2){animation-delay:.1s} section:nth-child(3){animation-delay:.15s}
+    section:nth-child(4){animation-delay:.2s} section:nth-child(5){animation-delay:.25s}
+    section:nth-child(6){animation-delay:.3s}
+
+    .section-label {
+      font-family: 'Space Mono', monospace; font-size: .68rem; letter-spacing: .22em;
+      text-transform: uppercase; color: var(--accent); margin-bottom: 16px;
+      display: flex; align-items: center; gap: 10px;
+    }
+    .section-label::after { content: ''; flex: 1; height: 1px; background: var(--border); }
+
+    /* ── ABOUT ── */
+    .about-box {
+      background: rgba(17,17,24,.85); border: 1px solid var(--border); border-radius: 12px;
+      padding: 24px; font-size: .95rem; line-height: 1.85; color: #a0aec0;
+      position: relative; overflow: hidden; backdrop-filter: blur(8px);
+    }
+    .about-box::before { content: ''; position: absolute; inset: 0 0 auto 0; height: 2px; background: linear-gradient(90deg, var(--accent), var(--accent2)); }
+
+    /* ── SKILLS ── */
+    .skills-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(110px,1fr)); gap: 10px; }
+    .skill-chip {
+      background: rgba(17,17,24,.85); border: 1px solid var(--border); border-radius: 8px;
+      padding: 10px 12px; text-align: center; font-family: 'Space Mono', monospace;
+      font-size: .75rem; color: var(--muted); transition: all .2s; cursor: default;
+      backdrop-filter: blur(6px);
+    }
+    .skill-chip:hover { border-color: var(--accent); color: var(--accent); transform: translateY(-2px); box-shadow: 0 4px 20px rgba(0,229,255,.15); }
+    .skill-chip .icon { font-size: 1.2rem; display: block; margin-bottom: 4px; }
+
+    /* ── PROJECTS ── */
+    .projects-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(360px, 1fr)); gap: 12px; }
+    @media (max-width: 600px) { .projects-grid { grid-template-columns: 1fr; } }
+
+    .project-card {
+      background: rgba(17,17,24,.85); border: 1px solid var(--border); border-radius: 12px;
+      padding: 20px 22px; display: flex; align-items: flex-start; justify-content: space-between; gap: 14px;
+      transition: all .22s; text-decoration: none; color: inherit; backdrop-filter: blur(8px);
+      position: relative; overflow: hidden;
+    }
+    .project-card::before { content: ''; position: absolute; inset: 0 0 auto 0; height: 1px; background: linear-gradient(90deg, transparent, var(--border), transparent); transition: background .2s; }
+    .project-card:hover { border-color: var(--accent2); transform: translateY(-3px); box-shadow: 0 8px 30px rgba(124,58,237,.2); }
+    .project-card:hover::before { background: linear-gradient(90deg, transparent, var(--accent2), transparent); }
+
+    .project-body { flex: 1; min-width: 0; }
+    .project-header { display: flex; align-items: center; gap: 8px; margin-bottom: 6px; }
+    .project-lang-dot { width: 10px; height: 10px; border-radius: 50%; flex-shrink: 0; }
+    .lang-csharp { background: #178600; }
+    .lang-python { background: #3572A5; }
+    .project-name { font-family: 'Space Mono', monospace; font-size: .88rem; color: #fff; font-weight: 700; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .project-desc { font-size: .8rem; color: var(--muted); line-height: 1.6; margin-bottom: 12px; }
+    .project-footer { display: flex; align-items: center; gap: 14px; }
+    .project-lang-label { font-family: 'Space Mono', monospace; font-size: .7rem; color: var(--muted); display: flex; align-items: center; gap: 5px; }
+    .project-stars { font-family: 'Space Mono', monospace; font-size: .7rem; color: var(--muted); display: flex; align-items: center; gap: 4px; }
+    .project-arrow { font-size: .9rem; color: var(--muted); transition: transform .2s, color .2s; align-self: center; flex-shrink: 0; }
+    .project-card:hover .project-arrow { color: var(--accent2); transform: translate(3px, -3px); }
+
+    /* ── STEAM SHELL ── */
+    .steam-card {
+      border-radius: 14px; overflow: hidden; position: relative;
+      border: 1px solid rgba(255,255,255,.08);
+      box-shadow: 0 8px 40px rgba(0,0,0,.5);
+    }
+    /* Steam card background (will be set to profile background) */
+    .steam-card-bg {
+      position: absolute; inset: 0; z-index: 0;
+      background-image: var(--steam-bg-img);
+      background-size: cover; background-position: center top;
+      filter: brightness(0.3) saturate(0.6);
+      transition: background-image .8s ease;
+    }
+    /* Fallback gradient when no bg */
+    .steam-card-bg.no-img {
+      background: linear-gradient(135deg, #1b2838 0%, #2a475e 60%, #1b2838 100%);
+    }
+    .steam-card-overlay {
+      position: absolute; inset: 0; z-index: 1;
+      background: linear-gradient(180deg, rgba(10,10,20,.25) 0%, rgba(10,10,20,.7) 100%);
+    }
+    .steam-card > * { position: relative; z-index: 2; }
+
+    .steam-top-bar {
+      padding: 14px 20px; display: flex; align-items: center; gap: 12px;
+      border-bottom: 1px solid rgba(255,255,255,.06);
+      background: rgba(0,0,0,.3); backdrop-filter: blur(4px);
+    }
+    .steam-logo { width: 32px; height: 32px; flex-shrink: 0; }
+    .steam-title { font-family: 'Space Mono', monospace; font-size: .9rem; color: #fff; }
+    .steam-title em { color: var(--sb); font-style: normal; }
+    #steamHeaderStatus {
+      margin-left: auto; display: none; align-items: center; gap: 6px;
+      font-family: 'Space Mono', monospace; font-size: .7rem;
+    }
+    .steam-body { padding: 20px; }
+
+    /* loading */
+    .steam-loading { display: flex; align-items: center; gap: 12px; color: rgba(255,255,255,.5); font-family: 'Space Mono', monospace; font-size: .8rem; }
+    .steam-spinner { width: 18px; height: 18px; border: 2px solid rgba(255,255,255,.15); border-top-color: var(--sb); border-radius: 50%; animation: spin .8s linear infinite; }
+
+    /* PROFILE WRAP */
+    .sp-wrap { display: flex; gap: 18px; align-items: flex-start; flex-wrap: wrap; }
+
+    /* avatar */
+    .sp-avatar-frame { position: relative; display: inline-block; flex-shrink: 0; }
+    .sp-avatar { width: 86px; height: 86px; border-radius: 6px; display: block; }
+    .sp-ring { position: absolute; inset: -4px; border-radius: 10px; border: 2px solid transparent; pointer-events: none; }
+    .sp-ring.online  { border-color: #57cbde; box-shadow: 0 0 14px rgba(87,203,222,.5); }
+    .sp-ring.ingame  { border-color: #90ba3c; box-shadow: 0 0 14px rgba(144,186,60,.5); }
+    .sp-ring.offline { border-color: #3d4450; }
+
+    /* info column */
+    .sp-info { flex: 1; min-width: 0; }
+    .sp-name { font-family: 'Space Mono', monospace; font-size: 1.05rem; font-weight: 700; color: #fff; margin-bottom: 5px; text-shadow: 0 1px 6px rgba(0,0,0,.7); }
+    .sp-status-row { display: flex; align-items: center; gap: 7px; font-size: .8rem; margin-bottom: 14px; }
+    .sdot { display: inline-block; width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; animation: pulse 2s infinite; }
+    .sdot.online  { background: #57cbde; }
+    .sdot.ingame  { background: #90ba3c; }
+    .sdot.offline { background: #4a525e; animation: none; }
+    .sdot.away    { background: #f59e0b; }
+    @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:.3} }
+    .sdot-lbl { color: rgba(255,255,255,.55); font-family: 'Space Mono', monospace; font-size: .78rem; }
+
+    /* now playing */
+    .sp-playing {
+      background: rgba(144,186,60,.12); border: 1px solid rgba(144,186,60,.3);
+      border-radius: 8px; padding: 10px 13px;
+      display: flex; align-items: center; gap: 12px; margin-bottom: 14px;
+    }
+    .sp-game-img { width: 44px; height: 44px; border-radius: 4px; object-fit: cover; flex-shrink: 0; }
+    .sp-game-placeholder { width: 44px; height: 44px; border-radius: 4px; background: rgba(0,0,0,.4); display: flex; align-items: center; justify-content: center; font-size: 1.3rem; flex-shrink: 0; }
+    .sp-playing-lbl { font-size: .6rem; letter-spacing: .12em; text-transform: uppercase; color: #90ba3c; font-family: 'Space Mono', monospace; margin-bottom: 3px; }
+    .sp-playing-name { font-family: 'Space Mono', monospace; font-size: .85rem; color: #fff; text-shadow: 0 1px 4px rgba(0,0,0,.7); }
+
+    /* recent games */
+    .sp-recent-lbl { font-family: 'Space Mono', monospace; font-size: .6rem; letter-spacing: .12em; text-transform: uppercase; color: rgba(255,255,255,.4); margin-bottom: 8px; }
+    .sp-games { display: flex; flex-direction: column; gap: 7px; margin-bottom: 16px; }
+    .sp-game-row { display: flex; align-items: center; gap: 10px; }
+    .sp-thumb { width: 32px; height: 32px; border-radius: 3px; object-fit: cover; flex-shrink: 0; background: rgba(0,0,0,.4); }
+    .sp-gname { font-family: 'Space Mono', monospace; font-size: .76rem; color: rgba(255,255,255,.75); flex: 1; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .sp-ghrs  { font-family: 'Space Mono', monospace; font-size: .7rem; color: rgba(255,255,255,.4); flex-shrink: 0; white-space: nowrap; }
+    .sp-bar-wrap { width: 56px; height: 3px; background: rgba(255,255,255,.1); border-radius: 2px; flex-shrink: 0; }
+    .sp-bar { height: 100%; background: var(--sb); border-radius: 2px; transition: width .9s ease; width: 0; }
+
+    /* visit btn */
+    .sp-btn {
+      display: inline-flex; align-items: center; gap: 8px;
+      background: rgba(27,154,239,.85); color: #fff; text-decoration: none;
+      padding: 8px 18px; border-radius: 6px;
+      font-family: 'Space Mono', monospace; font-size: .8rem; font-weight: 700;
+      transition: all .2s; backdrop-filter: blur(4px);
+      border: 1px solid rgba(27,154,239,.5);
+    }
+    .sp-btn:hover { background: rgba(27,154,239,1); transform: translateY(-1px); box-shadow: 0 4px 16px rgba(27,154,239,.4); }
+    .sp-err { font-family: 'Space Mono', monospace; font-size: .8rem; color: #f59e0b; line-height: 1.7; }
+
+    /* ── SOCIAL ── */
+    .social-links { display: flex; gap: 12px; flex-wrap: wrap; }
+    .social-btn {
+      display: inline-flex; align-items: center; gap: 8px;
+      background: rgba(17,17,24,.85); border: 1px solid var(--border);
+      color: var(--muted); text-decoration: none;
+      padding: 10px 18px; border-radius: 8px;
+      font-family: 'Space Mono', monospace; font-size: .8rem;
+      transition: all .2s; backdrop-filter: blur(6px);
+    }
+    .social-btn:hover { border-color: var(--accent); color: var(--accent); transform: translateY(-2px); box-shadow: 0 4px 16px rgba(0,229,255,.15); }
+    .social-btn svg { width: 16px; height: 16px; }
+
+    /* ── FOOTER ── */
+    footer {
+      text-align: center; font-family: 'Space Mono', monospace;
+      font-size: .68rem; color: var(--muted);
+      padding-top: 40px; border-top: 1px solid var(--border);
+      animation: fadeUp .8s ease .5s both;
+    }
+    footer span { color: var(--accent); }
+
+    @keyframes fadeUp { from { opacity: 0; transform: translateY(24px); } to { opacity: 1; transform: translateY(0); } }
+
+    @media (max-width: 540px) {
+      header { flex-direction: column; align-items: flex-start; gap: 16px; }
+      .skills-grid { grid-template-columns: repeat(3,1fr); }
+    }
+  </style>
+</head>
+<body>
+
+<div id="bg-layer"></div>
+<div class="orb orb-1"></div>
+<div class="orb orb-2"></div>
+<div class="cursor-glow" id="cursorGlow"></div>
+
+<div class="page">
+
+  <!-- HEADER -->
+  <header>
+    <div class="avatar-ring">
+      <div class="avatar-inner">
+        <img src="https://avatars.githubusercontent.com/u/183398652" alt="DNT_OF" onerror="this.style.display='none'" />
+      </div>
+    </div>
+    <div class="header-text">
+      <h1><span>//</span> DNT_OF</h1>
+      <div class="tagline">developer · SCP:SL plugin author · gamer</div>
+      <div class="header-sub">📍 成都 &nbsp;·&nbsp; <span>高中生 · 正在自学 C#</span></div>
+    </div>
+  </header>
+
+  <!-- ABOUT -->
+  <section>
+    <div class="section-label">about</div>
+    <div class="about-box">
+      嗨，我是 <strong style="color:#fff">DNT_OF</strong>，来自成都的普通高中生，开发插件纯属爱好。
+      主要使用 <strong style="color:var(--accent)">C#</strong> 开发 SCP: Secret Laboratory 游戏服务器插件（EXILED 框架），
+      同时用 <strong style="color:#3572A5">Python</strong> 写一些 AstrBot 插件。
+      喜欢把 AI 能力集成进游戏场景里搞出有趣的东西，也在 Steam 上消耗大量时间 🎮
+    </div>
+  </section>
+
+  <!-- SKILLS -->
+  <section>
+    <div class="section-label">skills</div>
+    <div class="skills-grid">
+      <div class="skill-chip"><span class="icon">⚙️</span>C#</div>
+      <div class="skill-chip"><span class="icon">🎮</span>SCP:SL</div>
+      <div class="skill-chip"><span class="icon">🔌</span>EXILED</div>
+      <div class="skill-chip"><span class="icon">🤖</span>AI / LLM</div>
+      <div class="skill-chip"><span class="icon">🐍</span>Python</div>
+      <div class="skill-chip"><span class="icon">✈️</span>ADS-B</div>
+      <div class="skill-chip"><span class="icon">🔧</span>.NET</div>
+      <div class="skill-chip"><span class="icon">☁️</span>API Dev</div>
+    </div>
+  </section>
+
+  <!-- PROJECTS -->
+  <section>
+    <div class="section-label">projects</div>
+    <div class="projects-grid">
+
+      <a class="project-card" href="https://github.com/DNTOF/astrbot_plugin_sl_query" target="_blank">
+        <div class="project-body">
+          <div class="project-header">
+            <span class="project-lang-dot lang-python"></span>
+            <span class="project-name">astrbot_plugin_sl_query</span>
+          </div>
+          <div class="project-desc">SCP:SL 服务器查询插件，支持官方 API + EXILED 双源实时查询，可绑定多个服务器</div>
+          <div class="project-footer">
+            <span class="project-lang-label"><span style="width:10px;height:10px;border-radius:50%;background:#3572A5;display:inline-block;"></span>Python</span>
+            <span class="project-stars">★ 2</span>
+          </div>
+        </div>
+        <div class="project-arrow">↗</div>
+      </a>
+
+      <a class="project-card" href="https://github.com/DNTOF/DeepSeekBot" target="_blank">
+        <div class="project-body">
+          <div class="project-header">
+            <span class="project-lang-dot lang-csharp"></span>
+            <span class="project-name">DeepSeekBot</span>
+          </div>
+          <div class="project-desc">SCP:SL EXILED 插件，让玩家在游戏内通过 .bot 命令使用 DeepSeek AI 对话，支持上下文记忆</div>
+          <div class="project-footer">
+            <span class="project-lang-label"><span style="width:10px;height:10px;border-radius:50%;background:#178600;display:inline-block;"></span>C#</span>
+            <span class="project-stars">★ 1</span>
+          </div>
+        </div>
+        <div class="project-arrow">↗</div>
+      </a>
+
+      <a class="project-card" href="https://github.com/DNTOF/SLDataAPI" target="_blank">
+        <div class="project-body">
+          <div class="project-header">
+            <span class="project-lang-dot lang-csharp"></span>
+            <span class="project-name">SLDataAPI</span>
+          </div>
+          <div class="project-desc">面向 astrbot_plugin_sl_query 的 EXILED 服务端数据提供插件，暴露实时服务器信息 API</div>
+          <div class="project-footer">
+            <span class="project-lang-label"><span style="width:10px;height:10px;border-radius:50%;background:#178600;display:inline-block;"></span>C#</span>
+            <span class="project-stars">★ 1</span>
+          </div>
+        </div>
+        <div class="project-arrow">↗</div>
+      </a>
+
+      <a class="project-card" href="https://github.com/DNTOF/astrbot_plugin_adsb_monitor" target="_blank">
+        <div class="project-body">
+          <div class="project-header">
+            <span class="project-lang-dot lang-python"></span>
+            <span class="project-name">astrbot_plugin_adsb_monitor</span>
+          </div>
+          <div class="project-desc">连接 Dump1090 的 JSON 输出，实时解析并推送 ADS-B 飞机信息，用于飞机监控</div>
+          <div class="project-footer">
+            <span class="project-lang-label"><span style="width:10px;height:10px;border-radius:50%;background:#3572A5;display:inline-block;"></span>Python</span>
+            <span class="project-stars">★ 1</span>
+          </div>
+        </div>
+        <div class="project-arrow">↗</div>
+      </a>
+
+    </div>
+  </section>
+
+  <!-- STEAM -->
+  <section>
+    <div class="section-label">steam</div>
+    <div class="steam-card" id="steamCard">
+      <div class="steam-card-bg no-img" id="steamCardBg"></div>
+      <div class="steam-card-overlay"></div>
+      <div class="steam-top-bar">
+        <svg class="steam-logo" viewBox="0 0 48 48" fill="none">
+          <circle cx="24" cy="24" r="24" fill="rgba(0,0,0,0.4)"/>
+          <path d="M24 8C15.163 8 8 15.163 8 24c0 7.594 5.146 14.003 12.13 15.897l4.39-6.41a5.2 5.2 0 0 1-.52-.487 5.25 5.25 0 1 1 7.704-7.144l6.636-2.72C37.686 17.036 31.427 8 24 8Z" fill="#1b9aef"/>
+          <circle cx="29.5" cy="24.5" r="4.5" fill="white" opacity=".9"/>
+        </svg>
+        <div class="steam-title">Steam <em>Profile</em></div>
+        <div id="steamHeaderStatus"></div>
+      </div>
+      <div class="steam-body" id="steamBody">
+        <div class="steam-loading">
+          <div class="steam-spinner"></div>
+          <span>正在加载 Steam 资料...</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- LINKS -->
+  <section>
+    <div class="section-label">links</div>
+    <div class="social-links">
+      <a class="social-btn" href="https://github.com/DNTOF" target="_blank">
+        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.477 2 2 6.477 2 12c0 4.418 2.865 8.166 6.839 9.489.5.092.682-.217.682-.483 0-.237-.009-.868-.013-1.703-2.782.604-3.369-1.34-3.369-1.34-.454-1.155-1.11-1.463-1.11-1.463-.908-.62.069-.607.069-.607 1.003.07 1.531 1.03 1.531 1.03.892 1.529 2.341 1.087 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.11-4.555-4.943 0-1.091.39-1.984 1.029-2.683-.103-.253-.446-1.27.098-2.647 0 0 .84-.269 2.75 1.025A9.578 9.578 0 0 1 12 6.836a9.59 9.59 0 0 1 2.504.337c1.909-1.294 2.747-1.025 2.747-1.025.546 1.377.202 2.394.1 2.647.64.699 1.028 1.592 1.028 2.683 0 3.842-2.339 4.687-4.566 4.935.359.309.678.919.678 1.852 0 1.336-.012 2.415-.012 2.743 0 .267.18.578.688.48C19.138 20.163 22 16.418 22 12c0-5.523-4.477-10-10-10z"/></svg>
+        GitHub
+      </a>
+      <a class="social-btn" id="steamSocialBtn" href="#" target="_blank" style="display:none;">
+        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M11.979 0C5.678 0 .511 4.86.022 11.037l6.432 2.658c.545-.371 1.203-.59 1.912-.59.063 0 .125.004.188.006l2.861-4.142V8.91c0-2.495 2.028-4.524 4.524-4.524 2.494 0 4.524 2.029 4.524 4.527s-2.03 4.525-4.524 4.525h-.105l-4.076 2.911c0 .052.004.105.004.159 0 1.875-1.515 3.396-3.39 3.396-1.635 0-3.016-1.173-3.331-2.727L.436 15.27C1.862 20.307 6.486 24 11.979 24c6.627 0 11.999-5.373 11.999-12S18.605 0 11.979 0z"/></svg>
+        Steam Profile
+      </a>
+    </div>
+  </section>
+
+  <footer>
+    <span>//</span> DNT_OF &nbsp;·&nbsp; 高中生一枚，代码爱好者，页面由Claude生成 &nbsp;·&nbsp; <span id="year"></span>
+  </footer>
+</div>
+
+<script>
+  document.getElementById('year').textContent = new Date().getFullYear();
+
+  // Cursor glow
+  const glow = document.getElementById('cursorGlow');
+  document.addEventListener('mousemove', e => {
+    glow.style.left = e.clientX + 'px';
+    glow.style.top  = e.clientY + 'px';
+  });
+
+  (async () => {
+    // Steam ID 分段拼接，防止被搜索引擎索引
+    const sid = '7656119' + '9173080951';
+
+    const xmlUrl     = `https://steamcommunity.com/profiles/${sid}/?xml=1`;
+    const profileUrl = `https://steamcommunity.com/profiles/${sid}/`;
+
+    // 代理列表
+    const PROXIES = [
+      url => `https://pages-proxy.dntof.workers.dev/?url=${encodeURIComponent(url)}`,
+      
+      // 留两个公共代理作为最后的兜底备份
+      url => `https://cors.zme.ink/${url}`,
+      url => `https://api.codetabs.com/v1/proxy?quest=${encodeURIComponent(url)}`
+    ];
+
+    async function fetchWithFallback(url) {
+      for (const makeProxy of PROXIES) {
+        try {
+          const r = await fetch(makeProxy(url), { signal: AbortSignal.timeout(8000) });
+          if (r.ok) return await r.text();
+        } catch {}
+      }
+      throw new Error('All proxies failed');
+    }
+
+    // ── 提取 Steam 资料背景图 ──────────────────────────────
+    // Steam 资料页 HTML 中背景图在 <div class="no_header profile_page"> 的 style 里
+    // 或者在 miniprofile_background / profile_background 的 CSS 里
+    async function extractProfileBackground() {
+      try {
+        const html = await fetchWithFallback(profileUrl);
+        // 匹配 background-image url 在资料页容器
+        const patterns = [
+          /profile_background[^}]*?url\(["']?([^"')]+)["']?\)/i,
+          /no_header profile_page[^}]*?background-image:\s*url\(["']?([^"')]+)["']?\)/i,
+          /"profile_background"\s*:\s*"([^"]+)"/i,
+          /background-image:\s*url\(["']?(https:\/\/cdn\.akamai\.steamstatic\.com[^"')]+)["']?\)/i,
+          /background-image:\s*url\(["']?(https:\/\/cdn\.cloudflare\.steamstatic\.com[^"')]+)["']?\)/i,
+        ];
+        for (const pat of patterns) {
+          const m = html.match(pat);
+          if (m && m[1]) return m[1].replace(/\\/g, '');
+        }
+      } catch {}
+      return null;
+    }
+
+    // ── 应用背景图到页面和 Steam 卡片 ───────────────────────
+    function applyBackground(imgUrl) {
+      if (!imgUrl) return;
+      // 通过代理加载图片以绕过 CORS
+      const proxiedImg = PROXIES[0](imgUrl);
+
+      // 先预加载确认图片可用
+      const img = new Image();
+      img.onload = () => {
+        // 页面大背景
+        const bgLayer = document.getElementById('bg-layer');
+        bgLayer.style.backgroundImage = `url('${proxiedImg}')`;
+        bgLayer.classList.add('loaded');
+
+        // Steam 卡片背景
+        const cardBg = document.getElementById('steamCardBg');
+        cardBg.style.backgroundImage = `url('${proxiedImg}')`;
+        cardBg.classList.remove('no-img');
+      };
+      img.src = proxiedImg;
+    }
+
+    // ── 加载 Steam XML 资料 ────────────────────────────────
+    const body = document.getElementById('steamBody');
+
+    // 并行发起两个请求
+    const [bgUrl, xmlText] = await Promise.all([
+      extractProfileBackground().catch(() => null),
+      fetchWithFallback(xmlUrl).catch(() => null),
+    ]);
+
+    // 应用背景
+    if (bgUrl) applyBackground(bgUrl);
+
+    if (!xmlText) {
+      body.innerHTML = `<div class="sp-err">
+        ⚠ 无法加载 Steam 资料。<br>
+        请确认 Steam 隐私设置为「公开」，或稍后刷新重试。<br><br>
+        <a class="sp-btn" href="${profileUrl}" target="_blank">▶ 访问 Steam 主页</a>
+      </div>`;
+      const sb = document.getElementById('steamSocialBtn');
+      sb.href = profileUrl; sb.style.display = 'inline-flex';
+      return;
+    }
+
+    try {
+      const xml  = new DOMParser().parseFromString(xmlText, 'text/xml');
+      const get  = tag => xml.querySelector(tag)?.textContent?.trim() ?? '';
+
+      const name      = get('steamID') || 'DNT_OF';
+      const avatar    = get('avatarFull') || get('avatarMedium') || get('avatarIcon');
+      const rawState  = get('onlineState');
+      const dotCls    = rawState === 'in-game' ? 'ingame' : rawState === 'online' ? 'online' : 'offline';
+      const stateLabel= rawState === 'in-game' ? 'In-Game' : rawState === 'online' ? 'Online' : 'Offline';
+      const customUrl = get('customURL');
+      const pUrl      = customUrl ? `https://steamcommunity.com/id/${customUrl}/` : profileUrl;
+      const gameName  = get('inGameInfo gameName') || get('gameName') || '';
+      const gameIcon  = get('inGameInfo gameIcon') || '';
+      const recentGames = [...xml.querySelectorAll('recentlyPlayedGame, mostPlayedGame')].slice(0, 5);
+
+      // Social btn
+      const sb = document.getElementById('steamSocialBtn');
+      sb.href = pUrl; sb.style.display = 'inline-flex';
+
+      // Header status dot
+      const hs = document.getElementById('steamHeaderStatus');
+      const dotColor = dotCls === 'online' ? '#57cbde' : dotCls === 'ingame' ? '#90ba3c' : '#4a525e';
+      hs.style.cssText = 'margin-left:auto;display:flex;align-items:center;gap:6px;font-family:Space Mono,monospace;font-size:.7rem;color:rgba(255,255,255,.55);';
+      hs.innerHTML = `<span style="display:inline-block;width:7px;height:7px;border-radius:50%;background:${dotColor};animation:pulse 2s infinite;flex-shrink:0;"></span>${stateLabel}`;
+
+      // Build card HTML
+      let html = `<div class="sp-wrap">
+        <div class="sp-avatar-frame">
+          <img class="sp-avatar" src="${avatar}" alt="${name}" onerror="this.style.opacity='.3'" />
+          <div class="sp-ring ${dotCls}"></div>
+        </div>
+        <div class="sp-info">
+          <div class="sp-name">${name}</div>
+          <div class="sp-status-row">
+            <span class="sdot ${dotCls}"></span>
+            <span class="sdot-lbl">${stateLabel}</span>
+          </div>`;
+
+      if (gameName) {
+        const imgTag = gameIcon
+          ? `<img class="sp-game-img" src="${gameIcon}" alt="${gameName}" onerror="this.replaceWith(this.nextSibling)" /><div class="sp-game-placeholder" style="display:none">🎮</div>`
+          : `<div class="sp-game-placeholder">🎮</div>`;
+      }
+
+      if (recentGames.length) {
+        const maxH = Math.max(1, ...recentGames.map(g =>
+          parseFloat(g.querySelector('hoursOnRecord,hoursForever')?.textContent || '0')
+        ));
+        html += `<div class="sp-recent-lbl">Recent Games</div><div class="sp-games">`;
+        recentGames.forEach(g => {
+          const gn   = g.querySelector('gameName')?.textContent?.trim() || 'Unknown';
+          const hrs  = parseFloat(g.querySelector('hoursOnRecord,hoursForever')?.textContent || '0');
+          const logo = g.querySelector('gameLogoSmall,logo')?.textContent?.trim() || '';
+          const pct  = Math.round((hrs / maxH) * 100);
+          const thumb = logo
+            ? `<img class="sp-thumb" src="${logo}" alt="" onerror="this.style.opacity='.2'" />`
+            : `<div class="sp-thumb"></div>`;
+          html += `<div class="sp-game-row">
+            ${thumb}
+            <span class="sp-gname">${gn}</span>
+            <div class="sp-bar-wrap"><div class="sp-bar" data-pct="${pct}"></div></div>
+            <span class="sp-ghrs">${hrs}h</span>
+          </div>`;
+        });
+        html += `</div>`;
+      }
+
+      html += `<a class="sp-btn" href="${pUrl}" target="_blank">▶ 查看 Steam 主页</a>
+        </div></div>`;
+
+      body.innerHTML = html;
+
+      // Animate bars
+      requestAnimationFrame(() => {
+        document.querySelectorAll('.sp-bar[data-pct]').forEach(bar => {
+          setTimeout(() => { bar.style.width = bar.dataset.pct + '%'; }, 150);
+        });
+      });
+
+    } catch (e) {
+      body.innerHTML = `<div class="sp-err">⚠ 解析 Steam 资料失败，请稍后刷新，请不要使用代理。<br><br>
+        <a class="sp-btn" href="${profileUrl}" target="_blank">▶ 访问 Steam 主页</a></div>`;
+    }
+  })();
+</script>
+
+</body>
+</html>
