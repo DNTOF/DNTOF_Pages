@@ -413,6 +413,58 @@
       translate: 2px -2px;
     }
 
+    /* ── CONTRIBUTIONS ── */
+    .contrib-card {
+      background: var(--color-bg-raised);
+      border: 1px solid var(--color-border-subtle);
+      border-radius: var(--radius-lg);
+      padding: var(--space-6);
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-4);
+      transition: transform var(--duration-normal) var(--ease-default),
+                  box-shadow var(--duration-normal) ease;
+    }
+    .contrib-card:hover {
+      transform: translateY(-2px);
+      box-shadow: var(--shadow-elevated);
+    }
+    .contrib-card__head {
+      display: flex; align-items: baseline; justify-content: space-between;
+      gap: var(--space-4); flex-wrap: wrap;
+    }
+    .contrib-card__title {
+      font-family: var(--font-heading);
+      font-size: var(--text-sm);
+      font-weight: 600;
+      color: var(--color-text-primary);
+    }
+    .contrib-card__sub {
+      font-family: var(--font-heading);
+      font-size: var(--text-xs);
+      color: var(--color-text-muted);
+    }
+    .contrib-card__chart {
+      width: 100%; height: auto; display: block;
+      background: rgba(20,20,19,0.03);
+      border: 1px solid var(--color-border-subtle);
+      border-radius: var(--radius-md);
+      padding: var(--space-3);
+    }
+    @media (prefers-color-scheme: dark) {
+      .contrib-card__chart { background: rgba(250,249,245,0.03); }
+    }
+    .contrib-card__link {
+      align-self: flex-start;
+      font-family: var(--font-heading);
+      font-size: var(--text-sm);
+      font-weight: 500;
+      color: var(--color-accent-orange);
+      display: inline-flex; align-items: center; gap: var(--space-2);
+      transition: gap var(--duration-fast) var(--ease-default);
+    }
+    .contrib-card__link:hover { gap: var(--space-3); }
+
     /* ── LINKS ── */
     .social-links { display: flex; gap: var(--space-3); flex-wrap: wrap; }
 
@@ -560,6 +612,24 @@
         </div>
       </a>
 
+    </div>
+  </section>
+
+  <!-- CONTRIBUTIONS -->
+  <section class="section">
+    <div class="section-label reveal">Contributions</div>
+    <div class="contrib-card reveal">
+      <div class="contrib-card__head">
+        <span class="contrib-card__title">过去一年的 GitHub 贡献</span>
+        <span class="contrib-card__sub">Last year</span>
+      </div>
+      <img class="contrib-card__chart"
+           src="https://ghchart.rshah.org/DNTOF"
+           alt="DNT_OF GitHub contribution graph"
+           loading="lazy" />
+      <a class="contrib-card__link" href="https://github.com/DNTOF" target="_blank">
+        查看完整主页 →
+      </a>
     </div>
   </section>
 
