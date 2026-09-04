@@ -35,10 +35,18 @@
       --radius-md: 8px;
       --radius-lg: 16px;
       --radius-xl: 24px;
+      --radius-full: 9999px;
+      --text-xs: 0.75rem;
+      --text-sm: 0.875rem;
+      --text-base: 1rem;
+      --text-md: 1.125rem;
+      --text-lg: 1.25rem;
+      --text-xl: 1.5rem;
       --space-1: 4px;
       --space-2: 8px;
       --space-3: 12px;
       --space-4: 16px;
+      --space-5: 20px;
       --space-6: 24px;
       --space-8: 32px;
       --space-10: 40px;
@@ -255,40 +263,6 @@
       text-align: center;
     }
 
-    /* ── PROJECTS LIST ── */
-    .org-list {
-      display: flex; flex-direction: column;
-      gap: var(--space-3);
-      margin-top: var(--space-8);
-      max-width: 65ch;
-    }
-    .org-item {
-      display: flex; align-items: baseline; gap: var(--space-4);
-      padding: var(--space-4) var(--space-6);
-      background: var(--color-bg-raised);
-      border: 1px solid var(--color-border-subtle);
-      border-radius: var(--radius-md);
-      transition: transform var(--duration-normal) var(--ease-default),
-                  box-shadow var(--duration-normal) ease;
-    }
-    .org-item:hover {
-      transform: translateY(-2px);
-      box-shadow: var(--shadow-elevated);
-    }
-    .org-item__name {
-      font-family: var(--font-mono);
-      font-size: var(--text-sm);
-      font-weight: 500;
-      color: var(--color-text-primary);
-      flex-shrink: 0;
-    }
-    .org-item__desc {
-      font-family: var(--font-body);
-      font-size: var(--text-sm);
-      line-height: 1.7;
-      color: var(--color-text-secondary);
-    }
-
     /* ── GOAL CARDS ── */
     .goal-band {
       background: #141413;
@@ -358,6 +332,60 @@
       color: rgba(250,249,245,0.55);
     }
 
+    /* ── COUNTDOWN ── */
+    .countdown {
+      text-align: center;
+      background: var(--color-bg-raised);
+      border: 1px solid var(--color-border-subtle);
+      border-radius: var(--radius-xl);
+      padding: clamp(var(--space-8), 5vw, var(--space-16));
+    }
+    .countdown__grid {
+      display: flex;
+      align-items: flex-start;
+      justify-content: center;
+      gap: var(--space-3);
+      flex-wrap: wrap;
+    }
+    .countdown__cell {
+      min-width: 88px;
+      padding: var(--space-4) var(--space-3) var(--space-3);
+      background: var(--color-bg-overlay);
+      border: 1px solid var(--color-border-subtle);
+      border-radius: var(--radius-md);
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-2);
+    }
+    .countdown__num {
+      font-family: var(--font-display);
+      font-variant-numeric: tabular-nums;
+      font-size: clamp(2rem, 5vw, 2.75rem);
+      font-weight: 400;
+      color: var(--color-text-primary);
+      line-height: 1.1;
+    }
+    .countdown__unit {
+      font-family: var(--font-heading);
+      font-size: var(--text-xs);
+      font-weight: 500;
+      color: var(--color-text-muted);
+    }
+    .countdown__sep {
+      font-family: var(--font-display);
+      font-size: clamp(1.5rem, 4vw, 2rem);
+      color: var(--color-border-default);
+      line-height: 1.6;
+      padding-top: var(--space-2);
+    }
+    .countdown__caption {
+      margin-top: var(--space-6);
+      font-family: var(--font-heading);
+      font-size: var(--text-sm);
+      font-weight: 500;
+      color: var(--color-accent-orange);
+    }
+
     /* ── FOOTER ── */
     footer {
       margin-top: var(--space-20);
@@ -377,7 +405,7 @@
     }
 
     @media (max-width: 540px) {
-      .org-item { flex-direction: column; gap: var(--space-1); }
+      .goal-grid { grid-template-columns: 1fr; }
     }
   </style>
 </head>
@@ -414,9 +442,9 @@
         <strong>EXILED 插件与数据接口</strong>为主的开发方向。
       </p>
       <p>
-        目前组织内已公开的项目以 <strong>SLAgent</strong> 为代表——一个基于 DeepSeek API 的
-        游戏内 AI 对话插件，让玩家无需离开服务器即可与 AI 交流；配套的数据接口与查询工具也
-        在持续迭代中。
+        组织内的开发成果大多源自日常服务器运营中的真实需求——从服务端数据接口到查询工具，
+        先解决自己的问题，再把可复用的部分沉淀成项目。随着这些项目逐渐成熟，
+        它们正在被整理成更适合公开使用的形态。
       </p>
     </div>
 
@@ -427,32 +455,6 @@
            loading="lazy" />
       <figcaption class="figure__caption">DNT-118 组织概述</figcaption>
     </figure>
-  </section>
-
-  <!-- CURRENT PROJECTS -->
-  <section class="section reveal">
-    <div class="section-label">Projects · 现有项目</div>
-    <h2 class="section-title">组织内已知并拥有的开发成果</h2>
-    <div class="section-body">
-      <p>
-        以下为组织内已知、由成员开发并拥有的项目，涵盖插件、数据接口与查询工具链，
-        覆盖 SCP:SL 服务器从数据获取到玩家交互的完整链路。
-      </p>
-    </div>
-    <div class="org-list">
-      <a class="org-item" href="https://github.com/DNT-118/SLAgent" target="_blank">
-        <span class="org-item__name">DNT-118/SLAgent</span>
-        <span class="org-item__desc">基于 DeepSeek API 的 SCP:SL 游戏内 AI 对话插件，支持上下文记忆。</span>
-      </a>
-      <a class="org-item" href="https://github.com/DNTOF/SLDataAPI" target="_blank">
-        <span class="org-item__name">SLDataAPI</span>
-        <span class="org-item__desc">面向查询与控制端的 EXILED 服务端数据接口，实时暴露服务器状态。</span>
-      </a>
-      <a class="org-item" href="https://github.com/DNTOF/astrbot_plugin_sl_query" target="_blank">
-        <span class="org-item__name">astrbot_plugin_sl_query</span>
-        <span class="org-item__desc">SCP:SL 服务器查询 AstrBot 插件，官方 API + EXILED 实时数据双源查询。</span>
-      </a>
-    </div>
   </section>
 
   <!-- GOAL -->
@@ -485,11 +487,70 @@
     </div>
   </section>
 
+  <!-- COUNTDOWN -->
+  <section class="section reveal">
+    <div class="countdown">
+      <div class="countdown__grid" id="countdownGrid">
+        <div class="countdown__cell">
+          <span class="countdown__num" id="cd-days">--</span>
+          <span class="countdown__unit">天</span>
+        </div>
+        <span class="countdown__sep">:</span>
+        <div class="countdown__cell">
+          <span class="countdown__num" id="cd-hours">--</span>
+          <span class="countdown__unit">时</span>
+        </div>
+        <span class="countdown__sep">:</span>
+        <div class="countdown__cell">
+          <span class="countdown__num" id="cd-mins">--</span>
+          <span class="countdown__unit">分</span>
+        </div>
+        <span class="countdown__sep">:</span>
+        <div class="countdown__cell">
+          <span class="countdown__num" id="cd-secs">--</span>
+          <span class="countdown__unit">秒</span>
+        </div>
+      </div>
+      <p class="countdown__caption">SCPSL_WebUI_Community 发布倒计时</p>
+    </div>
+  </section>
+
   <footer>
     <span>© DNT-118 · 由 DNT_OF 维护</span>
     <a href="https://github.com/DNT-118" target="_blank">GitHub 组织 →</a>
   </footer>
 </div>
+
+<script>
+  // 目标时间：2027-01-01 11:18（北京时间，UTC+8）
+  const TARGET = new Date('2027-01-01T11:18:00+08:00');
+
+  function pad(n) { return String(n).padStart(2, '0'); }
+
+  function tick() {
+    const diff = TARGET - Date.now();
+    const days = document.getElementById('cd-days');
+    const hours = document.getElementById('cd-hours');
+    const mins = document.getElementById('cd-mins');
+    const secs = document.getElementById('cd-secs');
+
+    if (diff <= 0) {
+      days.textContent = '00';
+      hours.textContent = '00';
+      mins.textContent = '00';
+      secs.textContent = '00';
+      return;
+    }
+
+    days.textContent = pad(Math.floor(diff / 86400000));
+    hours.textContent = pad(Math.floor(diff / 3600000) % 24);
+    mins.textContent = pad(Math.floor(diff / 60000) % 60);
+    secs.textContent = pad(Math.floor(diff / 1000) % 60);
+  }
+
+  tick();
+  setInterval(tick, 1000);
+</script>
 
 </body>
 </html>
