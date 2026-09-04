@@ -136,6 +136,43 @@
     .reveal:nth-child(4) { animation-delay: 240ms; }
     .reveal:nth-child(5) { animation-delay: 320ms; }
 
+    /* ── NAV ── */
+    .top-nav {
+      display: flex; align-items: center; justify-content: space-between;
+      gap: var(--space-4); flex-wrap: wrap;
+      margin-bottom: var(--space-16);
+      animation: fadeUp var(--duration-slow) var(--ease-default) forwards;
+    }
+    .top-nav__brand {
+      font-family: var(--font-display);
+      font-size: 1.15rem;
+      color: var(--color-text-primary);
+      display: inline-flex; align-items: center; gap: var(--space-3);
+    }
+    .top-nav__brand .dot {
+      width: 8px; height: 8px; border-radius: 50%;
+      background: var(--color-accent-orange);
+      display: inline-block;
+    }
+    .top-nav__links {
+      display: flex; align-items: center; gap: var(--space-3); flex-wrap: wrap;
+    }
+    .top-nav__link {
+      font-family: var(--font-heading);
+      font-size: var(--text-sm);
+      font-weight: 500;
+      color: var(--color-text-secondary);
+      padding: var(--space-2) var(--space-4);
+      border-radius: var(--radius-full);
+      border: 1px solid transparent;
+      transition: all var(--duration-fast) var(--ease-default);
+    }
+    .top-nav__link:hover {
+      color: var(--color-accent-orange);
+      border-color: var(--color-border-default);
+      background: var(--color-bg-raised);
+    }
+
     /* ── HERO ── */
     .hero {
       display: flex; flex-direction: column; gap: var(--space-8);
@@ -513,6 +550,16 @@
 <body>
 
 <div class="page">
+
+  <!-- NAV -->
+  <nav class="top-nav">
+    <a class="top-nav__brand" href="/">
+      <span class="dot"></span>DNT_OF
+    </a>
+    <div class="top-nav__links">
+      <a class="top-nav__link" href="/dnt-118/">DNT-118 组织</a>
+    </div>
+  </nav>
 
   <!-- HERO -->
   <section class="hero reveal">

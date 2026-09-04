@@ -1,0 +1,495 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>DNT-118 — 开发组织</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,600;0,700;1,400&family=Poppins:wght@300;400;500;600;700&family=Noto+Sans+SC:wght@300;400;500;700&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --color-bg-base: #ECE9E0;
+      --color-bg-raised: #F5F3EC;
+      --color-bg-overlay: #FDFCF8;
+      --color-bg-inverted: #141413;
+      --color-text-primary: #141413;
+      --color-text-secondary: #6B6860;
+      --color-text-muted: #B0AEA5;
+      --color-text-inverted: #FAF9F5;
+      --color-text-link: #C96442;
+      --color-border-default: #D8D5CC;
+      --color-border-subtle: #E8E6DC;
+      --color-accent-orange: #D97757;
+      --color-accent-warm: #C96442;
+      --color-accent-blue: #6A9BCC;
+      --color-accent-green: #788C5D;
+      --color-accent-sand: #C4B99A;
+      --shadow-card: 0 2px 12px rgba(20,20,19,0.07);
+      --shadow-elevated: 0 8px 32px rgba(20,20,19,0.08);
+      --font-display: 'Lora', serif;
+      --font-heading: 'Poppins', 'Noto Sans SC', sans-serif;
+      --font-body: 'Lora', 'Noto Sans SC', serif;
+      --font-mono: 'JetBrains Mono', 'Fira Code', monospace;
+      --radius-sm: 4px;
+      --radius-md: 8px;
+      --radius-lg: 16px;
+      --radius-xl: 24px;
+      --space-1: 4px;
+      --space-2: 8px;
+      --space-3: 12px;
+      --space-4: 16px;
+      --space-6: 24px;
+      --space-8: 32px;
+      --space-10: 40px;
+      --space-12: 48px;
+      --space-16: 64px;
+      --space-20: 80px;
+      --ease-default: cubic-bezier(0.16, 1, 0.3, 1);
+      --duration-fast: 150ms;
+      --duration-normal: 250ms;
+      --duration-slow: 400ms;
+    }
+
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --color-bg-base: #1A1916;
+        --color-bg-raised: #222119;
+        --color-bg-overlay: #2C2B26;
+        --color-text-primary: #EAE7DC;
+        --color-text-secondary: #9D9A91;
+        --color-text-muted: #5C5A54;
+        --color-text-inverted: #141413;
+        --color-border-default: #3A3830;
+        --color-border-subtle: #2E2D27;
+      }
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; -webkit-text-size-adjust: 100%; }
+
+    body {
+      background-color: var(--color-bg-base);
+      color: var(--color-text-primary);
+      font-family: var(--font-heading);
+      font-size: 1rem;
+      line-height: 1.55;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+      min-height: 100vh;
+    }
+
+    img { display: block; max-width: 100%; }
+    a { color: inherit; text-decoration: none; }
+
+    :focus-visible {
+      outline: 2px solid var(--color-accent-orange);
+      outline-offset: 3px;
+      border-radius: var(--radius-sm);
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+      }
+    }
+
+    body::after {
+      content: ''; position: fixed; inset: 0; pointer-events: none; z-index: 0;
+      background:
+        radial-gradient(ellipse 80% 60% at 15% 5%, rgba(217,119,87,0.05) 0%, transparent 60%),
+        radial-gradient(ellipse 60% 50% at 85% 90%, rgba(120,140,93,0.04) 0%, transparent 50%);
+    }
+
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(24px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    .reveal {
+      opacity: 0;
+      animation: fadeUp var(--duration-slow) var(--ease-default) forwards;
+    }
+    .reveal:nth-child(1) { animation-delay: 0ms; }
+    .reveal:nth-child(2) { animation-delay: 80ms; }
+    .reveal:nth-child(3) { animation-delay: 160ms; }
+    .reveal:nth-child(4) { animation-delay: 240ms; }
+    .reveal:nth-child(5) { animation-delay: 320ms; }
+
+    /* ── NAV ── */
+    .nav {
+      max-width: 880px; margin: 0 auto;
+      padding: var(--space-8) clamp(20px, 5vw, 48px) 0;
+      display: flex; align-items: center; justify-content: space-between;
+      gap: var(--space-4); flex-wrap: wrap;
+      position: relative; z-index: 1;
+      animation: fadeUp var(--duration-slow) var(--ease-default) forwards;
+    }
+    .nav__brand {
+      font-family: var(--font-display);
+      font-size: 1.15rem;
+      color: var(--color-text-primary);
+      display: inline-flex; align-items: baseline; gap: var(--space-2);
+    }
+    .nav__brand .dot {
+      width: 8px; height: 8px; border-radius: 50%;
+      background: var(--color-accent-orange);
+      display: inline-block;
+    }
+    .nav__back {
+      font-family: var(--font-heading);
+      font-size: var(--text-sm);
+      font-weight: 500;
+      color: var(--color-text-secondary);
+      display: inline-flex; align-items: center; gap: var(--space-1);
+      padding: var(--space-2) var(--space-4);
+      border: 1px solid var(--color-border-subtle);
+      border-radius: var(--radius-full);
+      background: var(--color-bg-raised);
+      transition: all var(--duration-fast) var(--ease-default);
+    }
+    .nav__back:hover {
+      color: var(--color-accent-orange);
+      border-color: var(--color-accent-orange);
+      transform: translateY(-1px);
+    }
+
+    /* ── LAYOUT ── */
+    .page {
+      position: relative; z-index: 1;
+      max-width: 880px; margin: 0 auto;
+      padding: clamp(32px, 5vw, 56px) clamp(20px, 5vw, 48px) var(--space-20);
+    }
+
+    /* ── HERO ── */
+    .hero { margin-bottom: var(--space-20); }
+
+    .hero__label {
+      font-family: var(--font-heading);
+      font-size: var(--text-xs);
+      font-weight: 600;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--color-accent-orange);
+      margin-bottom: var(--space-4);
+    }
+
+    .hero__title {
+      font-family: var(--font-display);
+      font-size: clamp(2.4rem, 6vw, 4rem);
+      font-weight: 400;
+      line-height: 1.1;
+      color: var(--color-text-primary);
+      margin-bottom: var(--space-6);
+    }
+
+    .hero__intro {
+      font-family: var(--font-body);
+      font-size: clamp(1rem, 2vw, 1.125rem);
+      line-height: 1.85;
+      color: var(--color-text-secondary);
+      max-width: 60ch;
+    }
+
+    /* ── SECTION ── */
+    .section { margin-bottom: var(--space-20); }
+
+    .section-label {
+      font-family: var(--font-heading);
+      font-size: var(--text-xs);
+      font-weight: 600;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--color-accent-orange);
+      margin-bottom: var(--space-6);
+    }
+    .section-label::after {
+      content: '';
+      display: inline-block;
+      width: 32px; height: 1px;
+      background: var(--color-border-default);
+      margin-left: var(--space-4);
+      vertical-align: middle;
+    }
+
+    .section-title {
+      font-family: var(--font-display);
+      font-size: clamp(1.5rem, 3vw, 2.1rem);
+      font-weight: 400;
+      color: var(--color-text-primary);
+      line-height: 1.25;
+      max-width: 30ch;
+      margin-bottom: var(--space-6);
+    }
+
+    .section-body {
+      font-family: var(--font-body);
+      font-size: var(--text-base);
+      line-height: 1.85;
+      color: var(--color-text-secondary);
+      max-width: 65ch;
+    }
+    .section-body p + p { margin-top: var(--space-4); }
+    .section-body strong { color: var(--color-text-primary); font-weight: 600; }
+
+    /* ── OVERVIEW FIGURE ── */
+    .figure {
+      margin: var(--space-10) 0 var(--space-12);
+      background: var(--color-bg-raised);
+      border: 1px solid var(--color-border-subtle);
+      border-radius: var(--radius-xl);
+      padding: var(--space-6);
+      box-shadow: var(--shadow-card);
+    }
+    .figure__img {
+      width: 100%; height: auto;
+      border-radius: var(--radius-lg);
+      background: var(--color-bg-overlay);
+    }
+    .figure__caption {
+      margin-top: var(--space-4);
+      font-family: var(--font-heading);
+      font-size: var(--text-xs);
+      color: var(--color-text-muted);
+      text-align: center;
+    }
+
+    /* ── PROJECTS LIST ── */
+    .org-list {
+      display: flex; flex-direction: column;
+      gap: var(--space-3);
+      margin-top: var(--space-8);
+      max-width: 65ch;
+    }
+    .org-item {
+      display: flex; align-items: baseline; gap: var(--space-4);
+      padding: var(--space-4) var(--space-6);
+      background: var(--color-bg-raised);
+      border: 1px solid var(--color-border-subtle);
+      border-radius: var(--radius-md);
+      transition: transform var(--duration-normal) var(--ease-default),
+                  box-shadow var(--duration-normal) ease;
+    }
+    .org-item:hover {
+      transform: translateY(-2px);
+      box-shadow: var(--shadow-elevated);
+    }
+    .org-item__name {
+      font-family: var(--font-mono);
+      font-size: var(--text-sm);
+      font-weight: 500;
+      color: var(--color-text-primary);
+      flex-shrink: 0;
+    }
+    .org-item__desc {
+      font-family: var(--font-body);
+      font-size: var(--text-sm);
+      line-height: 1.7;
+      color: var(--color-text-secondary);
+    }
+
+    /* ── GOAL CARDS ── */
+    .goal-band {
+      background: #141413;
+      border-radius: var(--radius-xl);
+      padding: clamp(var(--space-8), 5vw, var(--space-16));
+      position: relative;
+      overflow: hidden;
+    }
+    .goal-band::before {
+      content: ''; position: absolute; inset: 0;
+      background:
+        radial-gradient(ellipse 60% 80% at 85% 15%, rgba(217,119,87,0.10) 0%, transparent 60%);
+      pointer-events: none;
+    }
+    .goal-band > * { position: relative; z-index: 1; }
+
+    .goal-band__label {
+      font-family: var(--font-heading);
+      font-size: var(--text-xs);
+      font-weight: 600;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--color-accent-orange);
+      margin-bottom: var(--space-6);
+    }
+    .goal-band__title {
+      font-family: var(--font-display);
+      font-size: clamp(1.5rem, 4vw, 2.4rem);
+      font-weight: 400;
+      color: #FAF9F5;
+      line-height: 1.25;
+      margin-bottom: var(--space-6);
+      max-width: 26ch;
+    }
+    .goal-band__body {
+      font-family: var(--font-body);
+      font-size: var(--text-base);
+      line-height: 1.85;
+      color: rgba(250,249,245,0.72);
+      max-width: 62ch;
+      margin-bottom: var(--space-10);
+    }
+    .goal-band__body strong { color: #FAF9F5; font-weight: 600; }
+
+    .goal-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: var(--space-4);
+    }
+    .goal-item {
+      padding: var(--space-5);
+      border: 1px solid rgba(250,249,245,0.10);
+      border-radius: var(--radius-md);
+      background: rgba(250,249,245,0.03);
+    }
+    .goal-item__title {
+      font-family: var(--font-heading);
+      font-size: var(--text-sm);
+      font-weight: 600;
+      color: var(--color-accent-orange);
+      margin-bottom: var(--space-2);
+    }
+    .goal-item__body {
+      font-family: var(--font-body);
+      font-size: var(--text-sm);
+      line-height: 1.75;
+      color: rgba(250,249,245,0.55);
+    }
+
+    /* ── FOOTER ── */
+    footer {
+      margin-top: var(--space-20);
+      padding-top: var(--space-8);
+      border-top: 1px solid var(--color-border-subtle);
+      display: flex; align-items: center; justify-content: space-between;
+      gap: var(--space-4); flex-wrap: wrap;
+      font-family: var(--font-body);
+      font-size: var(--text-sm);
+      color: var(--color-text-muted);
+    }
+    footer a {
+      color: var(--color-accent-orange);
+      font-family: var(--font-heading);
+      font-size: var(--text-sm);
+      font-weight: 500;
+    }
+
+    @media (max-width: 540px) {
+      .org-item { flex-direction: column; gap: var(--space-1); }
+    }
+  </style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav class="nav">
+  <a class="nav__brand" href="../">
+    <span class="dot"></span>DNT_OF
+  </a>
+  <a class="nav__back" href="../">← 返回主页</a>
+</nav>
+
+<div class="page">
+
+  <!-- HERO -->
+  <header class="hero reveal">
+    <p class="hero__label">Developer Organization · 开发组织</p>
+    <h1 class="hero__title">DNT-118</h1>
+    <p class="hero__intro">
+      一个围绕 SCP: Secret Laboratory 服务器生态展开的开发者组织——由玩家与开发者组成，
+      长期维护 EXILED 服务端插件、数据接口与配套工具，让游戏服务器管理变得更开放、更简单。
+    </p>
+  </header>
+
+  <!-- ABOUT -->
+  <section class="section reveal">
+    <div class="section-label">About · 组织概况</div>
+    <h2 class="section-title">从服务器到社区，一个逐渐生长的开发圈子</h2>
+    <div class="section-body">
+      <p>
+        DNT-118 起初是一群在 SCP:SL 服务器上结识的玩家。随着日常维护服务器的需求变多，
+        开始自己写插件、修问题，慢慢积累出一个以
+        <strong>EXILED 插件与数据接口</strong>为主的开发方向。
+      </p>
+      <p>
+        目前组织内已公开的项目以 <strong>SLAgent</strong> 为代表——一个基于 DeepSeek API 的
+        游戏内 AI 对话插件，让玩家无需离开服务器即可与 AI 交流；配套的数据接口与查询工具也
+        在持续迭代中。
+      </p>
+    </div>
+
+    <figure class="figure">
+      <img class="figure__img"
+           src="org-overview.webp"
+           alt="DNT-118 组织概述图"
+           loading="lazy" />
+      <figcaption class="figure__caption">DNT-118 组织概述</figcaption>
+    </figure>
+  </section>
+
+  <!-- CURRENT PROJECTS -->
+  <section class="section reveal">
+    <div class="section-label">Projects · 现有项目</div>
+    <h2 class="section-title">组织内已知并拥有的开发成果</h2>
+    <div class="section-body">
+      <p>
+        以下为组织内已知、由成员开发并拥有的项目，涵盖插件、数据接口与查询工具链，
+        覆盖 SCP:SL 服务器从数据获取到玩家交互的完整链路。
+      </p>
+    </div>
+    <div class="org-list">
+      <a class="org-item" href="https://github.com/DNT-118/SLAgent" target="_blank">
+        <span class="org-item__name">DNT-118/SLAgent</span>
+        <span class="org-item__desc">基于 DeepSeek API 的 SCP:SL 游戏内 AI 对话插件，支持上下文记忆。</span>
+      </a>
+      <a class="org-item" href="https://github.com/DNTOF/SLDataAPI" target="_blank">
+        <span class="org-item__name">SLDataAPI</span>
+        <span class="org-item__desc">面向查询与控制端的 EXILED 服务端数据接口，实时暴露服务器状态。</span>
+      </a>
+      <a class="org-item" href="https://github.com/DNTOF/astrbot_plugin_sl_query" target="_blank">
+        <span class="org-item__name">astrbot_plugin_sl_query</span>
+        <span class="org-item__desc">SCP:SL 服务器查询 AstrBot 插件，官方 API + EXILED 实时数据双源查询。</span>
+      </a>
+    </div>
+  </section>
+
+  <!-- GOAL -->
+  <section class="section reveal">
+    <div class="goal-band">
+      <p class="goal-band__label">Direction · 开发方向</p>
+      <h2 class="goal-band__title">把已知的成果，带向更大的社区</h2>
+      <div class="goal-band__body">
+        <p>
+          现阶段，组织内的大部分项目仍偏向内部使用。接下来的开发目标，是把这些
+          <strong>已知且由组织拥有的项目，整理出一个面向大众社区的公开分支</strong>——
+          保留稳定的功能内核，同时开放文档、发行与反馈渠道，
+          让更多服务器与玩家可以自由使用这些工具。
+        </p>
+      </div>
+      <div class="goal-grid">
+        <div class="goal-item">
+          <div class="goal-item__title">社区版分支</div>
+          <div class="goal-item__body">在既有项目基础上建立公开维护的社区分支，作为面向大众的主要版本。</div>
+        </div>
+        <div class="goal-item">
+          <div class="goal-item__title">公开文档与发行</div>
+          <div class="goal-item__body">补全使用文档与安装指南，提供稳定的发行版本与更新渠道。</div>
+        </div>
+        <div class="goal-item">
+          <div class="goal-item__title">开放贡献</div>
+          <div class="goal-item__body">接受来自社区的 Issue 与建议，让使用者成为开发的一部分。</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    <span>© DNT-118 · 由 DNT_OF 维护</span>
+    <a href="https://github.com/DNT-118" target="_blank">GitHub 组织 →</a>
+  </footer>
+</div>
+
+</body>
+</html>
