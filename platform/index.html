@@ -236,6 +236,36 @@ h1, h2, h3 { font-family: var(--font-heading); font-weight: 500; line-height: 1.
 .footer a { color: var(--text-inverted-dim); }
 .footer a:hover { color: var(--text-inverted); }
 
+/* ===== 公开倒计时 ===== */
+#release { padding-top: 100px; }
+.countdown {
+  text-align: center;
+  background: var(--bg-raised);
+  border: 1px solid var(--border-subtle);
+  border-radius: 14px;
+  padding: clamp(32px, 5vw, 64px);
+  max-width: 720px;
+  margin: 0 auto;
+}
+.countdown__grid { display: flex; align-items: flex-start; justify-content: center; gap: 12px; flex-wrap: wrap; }
+.countdown__cell {
+  min-width: 88px; padding: 16px 12px 12px;
+  background: var(--bg-overlay);
+  border: 1px solid var(--border-subtle);
+  border-radius: 10px;
+  display: flex; flex-direction: column; gap: 8px;
+}
+.countdown__num {
+  font-family: var(--font-display);
+  font-variant-numeric: tabular-nums;
+  font-size: clamp(2rem, 5vw, 2.75rem);
+  font-weight: 400; color: var(--text-primary); line-height: 1.1;
+}
+.countdown__unit { font-family: var(--font-heading); font-size: 12px; font-weight: 500; color: var(--text-muted); }
+.countdown__sep { font-family: var(--font-display); font-size: clamp(1.5rem, 4vw, 2rem); color: var(--border-default); line-height: 1.6; padding-top: 8px; }
+.countdown__caption { margin-top: 24px; font-family: var(--font-heading); font-size: 14px; font-weight: 500; color: var(--accent-deep); }
+.countdown__note { margin-top: 8px; font-family: var(--font-mono); font-size: 11px; color: var(--text-muted); }
+
 /* ===== 进入动效 ===== */
 .reveal { opacity: 0; transform: translateY(24px); transition: opacity 0.6s var(--ease-default), transform 0.6s var(--ease-default); }
 .reveal.on { opacity: 1; transform: none; }
@@ -292,11 +322,12 @@ h1, h2, h3 { font-family: var(--font-heading); font-weight: 500; line-height: 1.
     <div class="hero__eyebrow">SCP:SL Server Management Ecosystem</div>
     <h1 class="hero__title">让服务器，<br /><em>被优雅地管理。</em></h1>
     <p class="hero__sub">
-      SLDataAPI 与 Foundation Console —— 一套从游戏内插件到自托管控制台的开源管理生态。
+      SLDataAPI 与 Foundation Console —— 一套从游戏内插件到自托管控制台的管理生态。
       为 SCP:SL 社区服务器而写：实时、可控、可追溯。
+      源码将于 2027 年 1 月 1 日 11:18 正式公开。
     </p>
     <div class="hero__cta">
-      <a class="btn btn--primary" href="https://github.com/DNTOF/SLDataAPI" target="_blank" rel="noreferrer">查看源码 ↗</a>
+      <a class="btn btn--primary" href="#release">公开倒计时</a>
       <a class="btn btn--ghost" href="https://github.com/DNTOF" target="_blank" rel="noreferrer">更多项目</a>
     </div>
   </div>
@@ -316,7 +347,7 @@ h1, h2, h3 { font-family: var(--font-heading); font-weight: 500; line-height: 1.
 
 <span class="c"># 凭据从不进入前端代码</span>
 <span class="c"># 平台与游戏服之间，始终由服务端代理</span></code>
-      <span class="hero__code-badge">Open Source</span>
+      <span class="hero__code-badge">Source · 2027</span>
     </div>
   </div>
 </header>
@@ -430,9 +461,10 @@ h1, h2, h3 { font-family: var(--font-heading); font-weight: 500; line-height: 1.
       <div class="quote__src">—— Auguste Kerckhoffs · La cryptographie militaire (1883) · 项目代号 Kerckhoffs 的由来</div>
     </div>
     <p class="section__lede" style="margin-top:32px">
-      这套生态的安全设计遵循同样的原则：接口公开、结构公开、源码公开——
+      这套生态的安全设计遵循同样的原则：一切可以被公开的，都应公开——
       秘密只存在于应当存在的密钥里。双轨凭证分离只读与写权限；配置缺陷（如引号、特殊字符）在启动时被显式点破，
       而不是让管理员在 403 里困惑。
+      当源码按计划公开后，这份承诺将交由社区共同检验。
     </p>
   </div>
 </section>
@@ -502,14 +534,41 @@ h1, h2, h3 { font-family: var(--font-heading); font-weight: 500; line-height: 1.
   </div>
 </section>
 
+<!-- ================= 公开倒计时 ================= -->
+<section class="section" id="release">
+  <div class="wrap reveal">
+    <div class="section__label">Open Source · 源码公开</div>
+    <h2 class="section__title">代码即将与所有人见面。</h2>
+    <p class="section__lede">
+      SLDataAPI 与 Foundation Console 正在完成最后的整理与文档工作。源码将于
+      <strong>2027 年 1 月 1 日 11:18</strong> 正式公开——在那之前，请让这份预告替你计时。
+    </p>
+  </div>
+  <div class="wrap reveal" style="margin-top:48px">
+    <div class="countdown" id="countdown">
+      <div class="countdown__grid">
+        <div class="countdown__cell"><span class="countdown__num" id="cd-days">--</span><span class="countdown__unit">天</span></div>
+        <span class="countdown__sep">:</span>
+        <div class="countdown__cell"><span class="countdown__num" id="cd-hours">--</span><span class="countdown__unit">时</span></div>
+        <span class="countdown__sep">:</span>
+        <div class="countdown__cell"><span class="countdown__num" id="cd-mins">--</span><span class="countdown__unit">分</span></div>
+        <span class="countdown__sep">:</span>
+        <div class="countdown__cell"><span class="countdown__num" id="cd-secs">--</span><span class="countdown__unit">秒</span></div>
+      </div>
+      <p class="countdown__caption">SLDataAPI × Foundation Console 源码公开倒计时</p>
+      <p class="countdown__note">2027-01-01 11:18 · UTC+8</p>
+    </div>
+  </div>
+</section>
+
 <!-- ================= CTA ================= -->
 <section class="cta">
   <div class="reveal">
     <h2 class="cta__title">社区服务器，值得更好的工具。</h2>
-    <p class="cta__sub">SLDataAPI 与 Foundation Console 均为开源项目。源码公开、文档齐备——欢迎自托管，也欢迎贡献。</p>
+    <p class="cta__sub">这套工具正在为公开那一天做准备。如果你愿意支持这个项目走下去，每一份心意都会被记住。</p>
     <div class="hero__cta" style="justify-content:center">
-      <a class="btn btn--primary" href="https://github.com/DNTOF/SLDataAPI" target="_blank" rel="noreferrer">GitHub · SLDataAPI ↗</a>
       <a class="btn btn--ghost" href="https://afdian.com/a/DNT_OF" target="_blank" rel="noreferrer">支持作者</a>
+      <a class="btn btn--ghost" href="https://github.com/DNTOF" target="_blank" rel="noreferrer">GitHub · DNT_OF ↗</a>
     </div>
   </div>
 </section>
@@ -525,6 +584,33 @@ h1, h2, h3 { font-family: var(--font-heading); font-weight: 500; line-height: 1.
 </footer>
 
 <script>
+// ===== 源码公开倒计时（目标：2027-01-01 11:18 UTC+8）=====
+(function () {
+  var TARGET = new Date('2027-01-01T11:18:00+08:00');
+  function pad(n) { return String(n).padStart(2, '0'); }
+  var days = document.getElementById('cd-days');
+  var hours = document.getElementById('cd-hours');
+  var mins = document.getElementById('cd-mins');
+  var secs = document.getElementById('cd-secs');
+  if (!days) return;
+  function tick() {
+    var diff = TARGET - Date.now();
+    if (diff <= 0) {
+      days.textContent = '00'; hours.textContent = '00';
+      mins.textContent = '00'; secs.textContent = '00';
+      return;
+    }
+    var d = Math.floor(diff / 86400000);
+    var h = Math.floor((diff % 86400000) / 3600000);
+    var m = Math.floor((diff % 3600000) / 60000);
+    var s = Math.floor((diff % 60000) / 1000);
+    days.textContent = pad(d); hours.textContent = pad(h);
+    mins.textContent = pad(m); secs.textContent = pad(s);
+  }
+  tick();
+  setInterval(tick, 1000);
+})();
+
 // 滚动进入视口时显现（IntersectionObserver）
 (function () {
   var els = document.querySelectorAll('.reveal');
