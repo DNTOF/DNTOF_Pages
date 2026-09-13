@@ -97,6 +97,20 @@
     .reveal:nth-child(4) { animation-delay: 270ms; }
     .reveal:nth-child(5) { animation-delay: 360ms; }
 
+    /* ── Hero 逐词浮现（复刻官方 animate-word）── */
+    .animate-word {
+      display: inline-block;
+      opacity: 0;
+      transform: translateY(24px);
+      transition: opacity 800ms cubic-bezier(0.16, 1, 0.3, 1),
+                  transform 800ms cubic-bezier(0.16, 1, 0.3, 1);
+      will-change: opacity, transform;
+    }
+    .animate-word.is-in { opacity: 1; transform: none; }
+    @media (prefers-reduced-motion: reduce) {
+      .animate-word { opacity: 1; transform: none; transition: none; }
+    }
+
     /* ── NAV（Anthropic Sans 角色 → MiSans 中文）── */
     .nav {
       position: sticky; top: 0; z-index: 50;
@@ -127,7 +141,7 @@
     .nav__links a:hover { color: var(--ink); }
 
     .wrap {
-      max-width: 1020px; margin: 0 auto;
+      max-width: 1200px; margin: 0 auto;
       padding: 0 clamp(20px, 5vw, 48px);
     }
 
@@ -180,8 +194,8 @@
     .btn--ghost { border: 1px solid var(--line-2); color: var(--ink); }
     .btn--ghost:hover { border-color: var(--ink); }
 
-    /* ── 区块通用 ── */
-    .section { padding: var(--space-24) 0 0; }
+    /* ── 区块通用（官方节奏：section-space--main = 10rem）── */
+    .section { padding: clamp(96px, 10vw, 160px) 0 0; }
     .section:last-of-type { padding-bottom: var(--space-24); }
     .section-label {
       font-family: var(--font-mono);
@@ -563,6 +577,46 @@
 
 <script>
   document.getElementById('year').textContent = new Date().getFullYear();
+
+  // Hero 逐词浮现（复刻官方 word animation：拉丁词整体、CJK 单字、链接作为整体单元）
+  (function () {
+    const h1 = document.querySelector('.hero h1');
+    if (!h1 || matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+
+    const tokens = [];
+    h1.childNodes.forEach(node => {
+      if (node.nodeType === Node.TEXT_NODE) {
+        const parts = node.textContent.match(/[A-Za-z0-9._:\\-]+|\s+|./gs) || [];
+        parts.forEach(p => tokens.push({ t: p, href: null }));
+      } else if (node.nodeType === Node.ELEMENT_NODE && node.tagName === 'A') {
+        tokens.push({ t: node.textContent, href: node.getAttribute('href') });
+      }
+    });
+
+    h1.textContent = '';
+    let i = 0;
+    const spans = [];
+    tokens.forEach(tok => {
+      if (/^\s+$/.test(tok.t)) { h1.appendChild(document.createTextNode(' ')); return; }
+      const span = document.createElement('span');
+      span.className = 'animate-word';
+      span.textContent = tok.t;
+      span.style.transitionDelay = (i++ * 45) + 'ms';
+      if (tok.href) {
+        const a = document.createElement('a');
+        a.href = tok.href;
+        a.appendChild(span);
+        h1.appendChild(a);
+      } else {
+        h1.appendChild(span);
+      }
+      spans.push(span);
+    });
+
+    requestAnimationFrame(() => requestAnimationFrame(() => {
+      spans.forEach(s => s.classList.add('is-in'));
+    }));
+  })();
 </script>
 
 </body>
