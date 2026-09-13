@@ -73,6 +73,9 @@
       }
     }
 
+    /* 跨页面平滑过渡（Chromium / Safari） */
+    @view-transition { navigation: auto; }
+
     /* ── 背景氛围：坐标纸网格 + 角部光晕 ── */
     body::before {
       content: ''; position: fixed; inset: 0; pointer-events: none; z-index: 0;
@@ -384,7 +387,10 @@
 <!-- NAV -->
 <nav class="nav">
   <a class="nav__brand" href="../">DNT_OF<b>_</b></a>
-  <a class="nav__back" href="../">← 返回主页</a>
+  <div style="display:flex; gap:12px; flex-wrap:wrap;">
+    <a class="nav__back" href="/platform/">平台介绍</a>
+    <a class="nav__back" href="../">← 返回主页</a>
+  </div>
 </nav>
 
 <div class="page">
