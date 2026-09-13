@@ -158,11 +158,12 @@
       object-fit: contain;
     }
     .hero h1 {
-      font-family: var(--font-serif);
-      font-weight: 600;
-      font-size: clamp(3rem, 8vw, 5.5rem);
-      line-height: 1.05;
-      letter-spacing: -0.01em;
+      font-family: var(--font-sans);
+      font-weight: 700;
+      font-size: clamp(2.6rem, 7vw, 4rem);
+      line-height: 1.1;
+      letter-spacing: 0;
+      text-wrap: balance;
       color: var(--ink);
     }
     .hero__sub {
@@ -350,23 +351,19 @@
       <h1>DNT-118</h1>
     </div>
     <p class="hero__sub">
-      几个 SCP:SL 服务器的玩家凑起来的开发小组。服务器缺什么工具就写什么，
-      写出来的东西攒多了，就建了这个组织，把它们归到一处。
+      面向 SCP:SL 服务器生态的开发组织。当前方向：EXILED 服务端插件与数据接口，
+      以及面向社区的公开分支。
     </p>
   </header>
 
-  <!-- ABOUT -->
+  <!-- DIRECTION -->
   <section class="section reveal">
-    <div class="section-label">ABOUT · 组织概况</div>
-    <h2 class="section-title">这个组织是怎么来的</h2>
+    <div class="section-label">DIRECTION · 组织方向</div>
+    <h2 class="section-title">当前的方向</h2>
     <div class="section-body">
       <p>
-        一开始只是几个玩家在同一个服务器里玩熟了。服务器缺功能，就有人动手写插件；
-        写出来的东西别人也能用，就慢慢传开。代码多了总要有个地方放，DNT-118 就是干这个的。
-      </p>
-      <p>
-        组织没有宏大的路线图，基本是需求推着走：服务器运营里碰到什么问题，就做什么工具。
-        写得最多的是 <strong>EXILED 插件和数据接口</strong>，也就成了现在的主要方向。
+        EXILED 服务端插件与数据接口——把服务器运营中反复出现的需求，
+        做成可复用的工具。
       </p>
     </div>
 
@@ -388,8 +385,7 @@
       <h2 class="section-title">给内部项目开一个面向社区的分支</h2>
       <div class="body">
         <p>
-          现在大部分项目只在自己服务器上跑，外人想用也不知道从哪下手。打算把这些
-          <strong>已知、归组织所有的项目逐个开出公开分支</strong>，作为面向大众社区的版本。
+          计划把这些<strong>已知、归组织所有的项目逐个开出公开分支</strong>，作为面向大众社区的版本。
           功能内核不变，其它都放开。
         </p>
       </div>
