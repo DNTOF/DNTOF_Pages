@@ -188,16 +188,6 @@
       flex-shrink: 0;
     }
 
-    .hero__label {
-      font-family: var(--font-heading);
-      font-size: var(--text-xs);
-      font-weight: 600;
-      letter-spacing: 0.14em;
-      text-transform: uppercase;
-      color: var(--color-accent-orange);
-      margin-bottom: var(--space-4);
-    }
-
     .hero__title {
       font-family: var(--font-display);
       font-size: clamp(2.4rem, 6vw, 3.6rem);
@@ -219,20 +209,10 @@
 
     .section-label {
       font-family: var(--font-heading);
-      font-size: var(--text-xs);
-      font-weight: 600;
-      letter-spacing: 0.12em;
-      text-transform: uppercase;
-      color: var(--color-accent-orange);
+      font-size: var(--text-sm);
+      font-weight: 500;
+      color: var(--color-accent-warm);
       margin-bottom: var(--space-6);
-    }
-    .section-label::after {
-      content: '';
-      display: inline-block;
-      width: 32px; height: 1px;
-      background: var(--color-border-default);
-      margin-left: var(--space-4);
-      vertical-align: middle;
     }
 
     .section-title {
@@ -295,10 +275,8 @@
 
     .goal-band__label {
       font-family: var(--font-heading);
-      font-size: var(--text-xs);
-      font-weight: 600;
-      letter-spacing: 0.12em;
-      text-transform: uppercase;
+      font-size: var(--text-sm);
+      font-weight: 500;
       color: var(--color-accent-orange);
       margin-bottom: var(--space-6);
     }
@@ -321,29 +299,28 @@
     }
     .goal-band__body strong { color: #FAF9F5; font-weight: 600; }
 
-    .goal-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    .goal-list {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+      display: flex;
+      flex-direction: column;
       gap: var(--space-4);
     }
-    .goal-item {
-      padding: var(--space-5);
-      border: 1px solid rgba(250,249,245,0.10);
-      border-radius: var(--radius-md);
-      background: rgba(250,249,245,0.03);
-    }
-    .goal-item__title {
-      font-family: var(--font-heading);
-      font-size: var(--text-sm);
-      font-weight: 600;
-      color: var(--color-accent-orange);
-      margin-bottom: var(--space-2);
-    }
-    .goal-item__body {
+    .goal-list li {
+      display: flex;
+      gap: var(--space-4);
+      align-items: baseline;
       font-family: var(--font-body);
-      font-size: var(--text-sm);
+      font-size: var(--text-base);
       line-height: 1.75;
-      color: rgba(250,249,245,0.55);
+      color: rgba(250,249,245,0.72);
+    }
+    .goal-list .num {
+      font-family: var(--font-mono);
+      font-size: var(--text-sm);
+      color: var(--color-accent-orange);
+      flex-shrink: 0;
     }
 
     /* ── COUNTDOWN ── */
@@ -419,7 +396,8 @@
     }
 
     @media (max-width: 540px) {
-      .goal-grid { grid-template-columns: 1fr; }
+      .countdown__grid { gap: var(--space-2); }
+      .countdown__cell { min-width: 72px; }
     }
   </style>
 </head>
@@ -437,31 +415,28 @@
 
   <!-- HERO -->
   <header class="hero reveal">
-    <p class="hero__label">Developer Organization · 开发组织</p>
     <div class="hero__brand">
       <img class="hero__logo" src="logo.webp" alt="DNT-118 Logo" />
       <h1 class="hero__title">DNT-118</h1>
     </div>
     <p class="hero__intro">
-      一个围绕 SCP: Secret Laboratory 服务器生态展开的开发者组织——由玩家与开发者组成，
-      长期维护 EXILED 服务端插件、数据接口与配套工具，让游戏服务器管理变得更开放、更简单。
+      几个 SCP:SL 服务器的玩家凑起来的开发小组。服务器缺什么工具就写什么，
+      写出来的东西攒多了，就建了这个组织，把它们归到一处。
     </p>
   </header>
 
   <!-- ABOUT -->
   <section class="section reveal">
-    <div class="section-label">About · 组织概况</div>
-    <h2 class="section-title">从服务器到社区，一个逐渐生长的开发圈子</h2>
+    <div class="section-label">组织概况</div>
+    <h2 class="section-title">这个组织是怎么来的</h2>
     <div class="section-body">
       <p>
-        DNT-118 起初是一群在 SCP:SL 服务器上结识的玩家。随着日常维护服务器的需求变多，
-        开始自己写插件、修问题，慢慢积累出一个以
-        <strong>EXILED 插件与数据接口</strong>为主的开发方向。
+        一开始只是几个玩家在同一个服务器里玩熟了。服务器缺功能，就有人动手写插件；
+        写出来的东西别人也能用，就慢慢传开。代码多了总要有个地方放，DNT-118 就是干这个的。
       </p>
       <p>
-        组织内的开发成果大多源自日常服务器运营中的真实需求——从服务端数据接口到查询工具，
-        先解决自己的问题，再把可复用的部分沉淀成项目。随着这些项目逐渐成熟，
-        它们正在被整理成更适合公开使用的形态。
+        组织没有宏大的路线图，基本是需求推着走：服务器运营里碰到什么问题，就做什么工具。
+        写得最多的是 <strong>EXILED 插件和数据接口</strong>，也就成了现在的主要方向。
       </p>
     </div>
 
@@ -477,30 +452,20 @@
   <!-- GOAL -->
   <section class="section reveal">
     <div class="goal-band">
-      <p class="goal-band__label">Direction · 开发方向</p>
-      <h2 class="goal-band__title">把已知的成果，带向更大的社区</h2>
+      <p class="goal-band__label">接下来的计划</p>
+      <h2 class="goal-band__title">给内部项目开一个面向社区的分支</h2>
       <div class="goal-band__body">
         <p>
-          现阶段，组织内的大部分项目仍偏向内部使用。接下来的开发目标，是把这些
-          <strong>已知且由组织拥有的项目，整理出一个面向大众社区的公开分支</strong>——
-          保留稳定的功能内核，同时开放文档、发行与反馈渠道，
-          让更多服务器与玩家可以自由使用这些工具。
+          现在大部分项目只在自己服务器上跑，外人想用也不知道从哪下手。打算把这些
+          <strong>已知、归组织所有的项目逐个开出公开分支</strong>，作为面向大众社区的版本。
+          功能内核不变，其它都放开。
         </p>
       </div>
-      <div class="goal-grid">
-        <div class="goal-item">
-          <div class="goal-item__title">社区版分支</div>
-          <div class="goal-item__body">在既有项目基础上建立公开维护的社区分支，作为面向大众的主要版本。</div>
-        </div>
-        <div class="goal-item">
-          <div class="goal-item__title">公开文档与发行</div>
-          <div class="goal-item__body">补全使用文档与安装指南，提供稳定的发行版本与更新渠道。</div>
-        </div>
-        <div class="goal-item">
-          <div class="goal-item__title">开放贡献</div>
-          <div class="goal-item__body">接受来自社区的 Issue 与建议，让使用者成为开发的一部分。</div>
-        </div>
-      </div>
+      <ol class="goal-list">
+        <li><span class="num">01</span>给现有项目建公开分支，作为社区版的主要发布渠道</li>
+        <li><span class="num">02</span>补全文档和安装说明，让人拿去就能用</li>
+        <li><span class="num">03</span>开放 Issue，收使用反馈和需求</li>
+      </ol>
     </div>
   </section>
 
