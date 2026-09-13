@@ -6,25 +6,28 @@
   <title>DNT_OF — Developer</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Saira+Stencil+One&family=ZCOOL+QingKe+HuangYou&family=Noto+Serif+SC:wght@400;600&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:opsz,wght@8..60,400;8..60,600&family=Archivo:wght@400;500;600&family=Noto+Serif+SC:wght@600&family=Noto+Sans+SC:wght@400;500&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet" />
   <style>
     :root {
-      /* 观测站档案 · 暖黑 + 米色墨 + 信号橙 */
-      --bg: #0C0B09;
-      --bg-2: #14120E;
-      --ink: #EAE3D2;
-      --ink-dim: #A69D87;
-      --ink-faint: #6B6455;
-      --accent: #E5703C;
-      --line: rgba(234, 227, 210, 0.14);
-      --line-soft: rgba(234, 227, 210, 0.07);
+      /* Anthropic 高仿 · 象牙底 + 墨黑 + Book Cloth 珊瑚 */
+      --bg: #F0EEE6;
+      --panel: #FAF9F5;
+      --ink: #191919;
+      --dim: #6E6A5E;
+      --faint: #A5A093;
+      --line: #DAD6CA;
+      --line-soft: #E5E1D5;
+      --accent: #CC785C;
+      --btn: #191919;
+      --dark-band: #191919;
+      --dark-ink: #FAF9F5;
+      --dark-dim: #B8B4A8;
 
-      --font-stencil: 'Saira Stencil One', 'ZCOOL QingKe HuangYou', sans-serif;
-      --font-display: 'ZCOOL QingKe HuangYou', 'Noto Serif SC', serif;
-      --font-body: 'Noto Serif SC', serif;
+      --font-serif: 'Source Serif 4', 'Noto Serif SC', serif;
+      --font-sans: 'Archivo', 'Noto Sans SC', sans-serif;
       --font-mono: 'JetBrains Mono', monospace;
 
-      --radius-sm: 4px;
+      --radius: 8px;
       --space-2: 8px;
       --space-3: 12px;
       --space-4: 16px;
@@ -33,6 +36,7 @@
       --space-8: 32px;
       --space-10: 40px;
       --space-16: 64px;
+      --space-20: 80px;
       --space-24: 96px;
       --ease-default: cubic-bezier(0.16, 1, 0.3, 1);
       --duration-normal: 250ms;
@@ -45,9 +49,9 @@
     body {
       background-color: var(--bg);
       color: var(--ink);
-      font-family: var(--font-body);
+      font-family: var(--font-sans);
       font-size: 1rem;
-      line-height: 1.9;
+      line-height: 1.75;
       -webkit-font-smoothing: antialiased;
       min-height: 100vh;
       overflow-x: hidden;
@@ -59,7 +63,7 @@
     :focus-visible {
       outline: 2px solid var(--accent);
       outline-offset: 3px;
-      border-radius: var(--radius-sm);
+      border-radius: 4px;
     }
 
     @media (prefers-reduced-motion: reduce) {
@@ -70,322 +74,308 @@
       }
     }
 
-    /* ── 背景氛围：坐标纸网格 + 角部光晕（全站一致）── */
-    body::before {
-      content: ''; position: fixed; inset: 0; pointer-events: none; z-index: 0;
-      background-image:
-        linear-gradient(var(--line-soft) 1px, transparent 1px),
-        linear-gradient(90deg, var(--line-soft) 1px, transparent 1px);
-      background-size: 56px 56px;
-    }
-    body::after {
-      content: ''; position: fixed; inset: 0; pointer-events: none; z-index: 0;
-      background:
-        radial-gradient(ellipse 55% 40% at 12% 0%, rgba(229,112,60,0.07) 0%, transparent 60%),
-        radial-gradient(ellipse 50% 45% at 100% 100%, rgba(234,227,210,0.04) 0%, transparent 55%);
-    }
-
-    /* 跨页面平滑过渡（Chromium / Safari） */
     @view-transition { navigation: auto; }
 
     @keyframes fadeUp {
-      from { opacity: 0; transform: translateY(28px); }
+      from { opacity: 0; transform: translateY(24px); }
       to { opacity: 1; transform: translateY(0); }
     }
     .reveal { opacity: 0; animation: fadeUp var(--duration-slow) var(--ease-default) forwards; }
     .reveal:nth-child(1) { animation-delay: 0ms; }
-    .reveal:nth-child(2) { animation-delay: 100ms; }
-    .reveal:nth-child(3) { animation-delay: 200ms; }
-    .reveal:nth-child(4) { animation-delay: 300ms; }
-    .reveal:nth-child(5) { animation-delay: 400ms; }
+    .reveal:nth-child(2) { animation-delay: 90ms; }
+    .reveal:nth-child(3) { animation-delay: 180ms; }
+    .reveal:nth-child(4) { animation-delay: 270ms; }
+    .reveal:nth-child(5) { animation-delay: 360ms; }
 
-    /* ── 角标刻线（观测镜十字刻度母题）── */
-    .ticks { position: relative; }
-    .ticks::before, .ticks::after {
-      content: ''; position: absolute; width: 14px; height: 14px;
-      pointer-events: none;
-    }
-    .ticks::before {
-      top: -1px; left: -1px;
-      border-top: 1px solid var(--accent);
-      border-left: 1px solid var(--accent);
-    }
-    .ticks::after {
-      bottom: -1px; right: -1px;
-      border-bottom: 1px solid var(--accent);
-      border-right: 1px solid var(--accent);
-    }
-
-    /* ── NAV ── */
+    /* ── NAV（仿 anthropic.com：奶油底 · 左字标 · 右链接）── */
     .nav {
-      max-width: 920px; margin: 0 auto;
-      padding: var(--space-8) clamp(20px, 5vw, 48px) 0;
+      position: sticky; top: 0; z-index: 50;
+      background: rgba(240, 238, 230, 0.88);
+      backdrop-filter: blur(10px);
+      border-bottom: 1px solid var(--line-soft);
+      max-width: none;
+      padding: 0 clamp(20px, 5vw, 64px);
+      height: 64px;
       display: flex; align-items: center; justify-content: space-between;
-      gap: var(--space-4); flex-wrap: wrap;
-      position: relative; z-index: 1;
-      animation: fadeUp var(--duration-slow) var(--ease-default) forwards;
-      font-family: var(--font-mono);
-      font-size: 0.875rem;
+      gap: var(--space-4);
     }
     .nav__brand {
-      display: inline-flex; align-items: center; gap: var(--space-2);
-      color: var(--ink-dim);
-      letter-spacing: 0.04em;
-    }
-    .nav__brand b { color: var(--accent); font-weight: 700; }
-    .nav__links { display: flex; gap: var(--space-3); flex-wrap: wrap; }
-    .nav__link {
-      color: var(--ink-dim);
-      padding: var(--space-2) var(--space-4);
-      border: 1px solid var(--line);
-      transition: color var(--duration-normal) var(--ease-default),
-                  border-color var(--duration-normal) var(--ease-default);
-    }
-    .nav__link:hover { color: var(--accent); border-color: var(--accent); }
-
-    /* ── LAYOUT ── */
-    .page {
-      position: relative; z-index: 1;
-      max-width: 920px; margin: 0 auto;
-      padding: clamp(40px, 7vw, 72px) clamp(20px, 5vw, 48px) var(--space-24);
-    }
-
-    /* ── HERO ── */
-    .hero {
-      margin-bottom: var(--space-24);
-      padding: var(--space-10) var(--space-6) var(--space-12);
-      border: 1px solid var(--line);
-      animation: fadeUp var(--duration-slow) var(--ease-default) forwards;
-    }
-    .hero__meta {
-      font-family: var(--font-mono);
-      font-size: 0.75rem;
-      color: var(--ink-faint);
-      letter-spacing: 0.08em;
-      margin-bottom: var(--space-10);
-      display: flex; justify-content: space-between; gap: var(--space-4); flex-wrap: wrap;
-    }
-    .hero__meta b { color: var(--accent); font-weight: 400; }
-
-    .hero__brand {
-      display: flex; align-items: center;
-      gap: clamp(var(--space-5), 4vw, var(--space-8));
-      flex-wrap: wrap;
-      margin-bottom: var(--space-10);
-    }
-    .hero__avatar {
-      width: clamp(72px, 11vw, 104px);
-      height: clamp(72px, 11vw, 104px);
-      object-fit: cover;
-      flex-shrink: 0;
-      border: 1px solid var(--line);
-    }
-    .hero__title {
-      font-family: var(--font-stencil);
-      font-weight: 400;
-      font-size: clamp(3rem, 10vw, 5.2rem);
-      line-height: 0.95;
-      letter-spacing: 0.01em;
+      font-family: var(--font-sans);
+      font-weight: 600;
+      font-size: 1.05rem;
+      letter-spacing: 0.02em;
       color: var(--ink);
     }
-    .hero__title span { color: var(--accent); }
+    .nav__brand b { color: var(--accent); font-weight: 600; }
+    .nav__links { display: flex; gap: var(--space-6); flex-wrap: wrap; }
+    .nav__links a {
+      font-family: var(--font-sans);
+      font-size: 0.9rem;
+      font-weight: 500;
+      color: var(--dim);
+      transition: color var(--duration-normal) var(--ease-default);
+    }
+    .nav__links a:hover { color: var(--ink); }
 
-    .hero__intro {
-      font-size: clamp(1rem, 2vw, 1.125rem);
-      line-height: 2;
-      color: var(--ink-dim);
-      max-width: 56ch;
+    .wrap {
+      max-width: 1020px; margin: 0 auto;
+      padding: 0 clamp(20px, 5vw, 48px);
     }
 
-    .hero__tags {
-      margin-top: var(--space-8);
-      display: flex; gap: var(--space-2); flex-wrap: wrap;
+    /* ── HERO（超大衬线陈述句）── */
+    .hero { padding: clamp(80px, 12vw, 140px) 0 clamp(64px, 8vw, 96px); }
+    .hero h1 {
+      font-family: var(--font-serif);
+      font-weight: 600;
+      font-size: clamp(2.5rem, 6.5vw, 4.5rem);
+      line-height: 1.15;
+      letter-spacing: -0.01em;
+      max-width: 18ch;
+      color: var(--ink);
     }
-    .hero__tags span {
-      font-family: var(--font-mono);
-      font-size: 0.72rem;
-      letter-spacing: 0.06em;
-      color: var(--ink-dim);
-      border: 1px solid var(--line);
-      padding: var(--space-1) var(--space-3);
+    .hero h1 em { font-style: normal; color: var(--accent); }
+    .hero__sub {
+      margin-top: var(--space-6);
+      font-size: clamp(1.05rem, 2vw, 1.2rem);
+      line-height: 1.8;
+      color: var(--dim);
+      max-width: 52ch;
     }
+    .hero__cta { margin-top: var(--space-10); display: flex; gap: var(--space-4); flex-wrap: wrap; }
+    .btn {
+      display: inline-flex; align-items: center; gap: var(--space-2);
+      padding: 13px 26px;
+      border-radius: 999px;
+      font-family: var(--font-sans);
+      font-size: 0.9rem;
+      font-weight: 500;
+      transition: transform var(--duration-normal) var(--ease-default),
+                  box-shadow var(--duration-normal) ease,
+                  border-color var(--duration-normal) ease;
+    }
+    .btn:hover { transform: translateY(-1px); }
+    .btn--primary { background: var(--btn); color: var(--dark-ink); }
+    .btn--primary:hover { box-shadow: 0 6px 20px rgba(25,25,25,0.22); }
+    .btn--ghost { border: 1px solid var(--line); color: var(--ink); }
+    .btn--ghost:hover { border-color: var(--ink); }
 
-    /* ── SECTION ── */
-    .section { margin-bottom: var(--space-24); }
-
+    /* ── 区块通用 ── */
+    .section { padding: var(--space-24) 0 0; }
+    .section:last-of-type { padding-bottom: var(--space-24); }
     .section-label {
       font-family: var(--font-mono);
-      font-size: 0.8rem;
-      color: var(--accent);
-      margin-bottom: var(--space-8);
-    }
-    .section-label::before { content: '/ '; color: var(--ink-faint); }
-
-    /* ── FEATURED ── */
-    .featured {
-      background: var(--bg-2);
-      border: 1px solid var(--line);
-      padding: clamp(var(--space-8), 5vw, var(--space-16));
-      position: relative;
-    }
-    .featured::before {
-      content: ''; position: absolute; left: -1px; top: -1px; bottom: -1px;
-      width: 3px; background: var(--accent);
-    }
-    .featured__label {
-      font-family: var(--font-mono);
-      font-size: 0.8rem;
+      font-size: 0.78rem;
+      letter-spacing: 0.08em;
       color: var(--accent);
       margin-bottom: var(--space-6);
     }
-    .featured__title {
-      font-family: var(--font-stencil);
-      font-weight: 400;
-      font-size: clamp(2rem, 5vw, 3rem);
-      line-height: 1;
+    .section-title {
+      font-family: var(--font-serif);
+      font-weight: 600;
+      font-size: clamp(1.75rem, 3.6vw, 2.6rem);
+      line-height: 1.25;
+      letter-spacing: -0.01em;
       color: var(--ink);
+      max-width: 26ch;
+    }
+
+    /* ── FEATURED：左文右码（仿产品双栏）── */
+    .featured {
+      margin-top: var(--space-10);
+      display: grid;
+      grid-template-columns: 6fr 5fr;
+      gap: clamp(var(--space-8), 5vw, var(--space-16));
+      align-items: center;
+    }
+    .featured__name {
+      font-family: var(--font-serif);
+      font-weight: 600;
+      font-size: clamp(1.6rem, 3vw, 2.2rem);
+      margin-bottom: var(--space-4);
+    }
+    .featured__name a:hover { color: var(--accent); }
+    .featured__desc {
+      color: var(--dim);
+      line-height: 1.85;
+      max-width: 54ch;
       margin-bottom: var(--space-6);
     }
-    .featured__title a { transition: color var(--duration-normal) var(--ease-default); }
-    .featured__title a:hover { color: var(--accent); }
-    .featured__desc {
-      font-size: clamp(1rem, 2vw, 1.0625rem);
-      line-height: 2.1;
-      color: var(--ink-dim);
-      max-width: 62ch;
-      margin-bottom: var(--space-8);
-    }
-    .featured__tech {
-      display: flex; gap: var(--space-2); flex-wrap: wrap;
-      margin-bottom: var(--space-8);
-    }
-    .featured__tech span {
-      font-family: var(--font-mono);
-      font-size: 0.72rem;
-      letter-spacing: 0.06em;
-      color: var(--ink-dim);
-      border: 1px solid var(--line);
-      padding: var(--space-1) var(--space-3);
-    }
-    .featured__list {
-      list-style: none;
-      border-top: 1px solid var(--line);
-      margin-bottom: var(--space-8);
-    }
+    .featured__list { list-style: none; margin-bottom: var(--space-6); }
     .featured__list li {
-      display: flex; gap: var(--space-6);
-      align-items: baseline;
-      padding: var(--space-4) var(--space-2);
-      border-bottom: 1px solid var(--line-soft);
-      font-size: 1rem;
-      line-height: 1.9;
-      color: var(--ink-dim);
-      transition: color var(--duration-normal) var(--ease-default),
-                  padding-left var(--duration-normal) var(--ease-default);
+      padding: var(--space-3) 0;
+      border-top: 1px solid var(--line-soft);
+      color: var(--dim);
+      font-size: 0.95rem;
+      display: flex; gap: var(--space-3); align-items: baseline;
     }
-    .featured__list li:hover { color: var(--ink); padding-left: var(--space-4); }
-    .featured__list .num {
-      font-family: var(--font-mono);
-      font-size: 0.8rem;
+    .featured__list li::before {
+      content: '—';
       color: var(--accent);
       flex-shrink: 0;
     }
     .featured__links { display: flex; gap: var(--space-6); flex-wrap: wrap; }
-    .featured__links a {
-      font-family: var(--font-mono);
-      font-size: 0.875rem;
-      color: var(--accent);
-    }
-    .featured__links a:hover { text-decoration: underline; text-underline-offset: 4px; }
-
-    /* ── PROJECT ROWS ── */
-    .projects {
-      list-style: none;
-      border-top: 1px solid var(--line);
-    }
-    .projects a {
-      display: flex; align-items: baseline; gap: var(--space-6);
-      padding: var(--space-5) var(--space-2);
-      border-bottom: 1px solid var(--line-soft);
-      transition: padding-left var(--duration-normal) var(--ease-default);
-    }
-    .projects a:hover { padding-left: var(--space-4); }
-    .projects .name {
-      font-family: var(--font-mono);
+    .textlink {
+      font-family: var(--font-sans);
       font-size: 0.9rem;
-      color: var(--ink);
-      flex-shrink: 0;
-      min-width: 240px;
+      font-weight: 500;
+      color: var(--accent);
+      border-bottom: 1px solid transparent;
+      transition: border-color var(--duration-normal) ease;
     }
-    .projects .desc {
-      font-size: 0.95rem;
-      line-height: 1.9;
-      color: var(--ink-dim);
-      flex: 1;
+    .textlink:hover { border-bottom-color: var(--accent); }
+
+    /* 代码卡片（仿终端窗格） */
+    .codecard {
+      position: relative;
+      background: var(--dark-band);
+      border-radius: 12px;
+      padding: 28px 0 24px;
+      box-shadow: 0 20px 48px rgba(25, 25, 25, 0.16);
+      transform: rotate(1.2deg);
     }
-    .projects .lang {
+    .codecard::before {
+      content: '●  ●  ●';
+      position: absolute; top: 14px; left: 20px;
+      font-size: 9px; letter-spacing: 4px; color: #5A574F;
+    }
+    .codecard code {
+      display: block;
+      font-family: var(--font-mono);
+      font-size: 12.5px; line-height: 1.9;
+      padding: 0 24px; white-space: pre;
+      overflow-x: auto;
+      color: var(--dark-dim);
+    }
+    .codecard .k { color: #E8A87C; }
+    .codecard .s { color: #9DBB8C; }
+    .codecard .c { color: #6E6A60; font-style: italic; }
+    .codecard .p { color: var(--accent); }
+    .codecard__badge {
+      position: absolute; bottom: -12px; right: 24px;
+      background: var(--accent); color: #141413;
+      font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.1em;
+      padding: 6px 14px; border-radius: 999px;
+    }
+
+    /* ── 暗色陈述带（仿全宽深色段落）── */
+    .band-dark {
+      margin-top: var(--space-24);
+      background: var(--dark-band);
+      color: var(--dark-ink);
+      padding: clamp(var(--space-16), 8vw, var(--space-24)) 0;
+    }
+    .band-dark .section-label { color: var(--accent); }
+    .band-dark p.lede {
+      font-family: var(--font-serif);
+      font-weight: 400;
+      font-size: clamp(1.4rem, 3vw, 2rem);
+      line-height: 1.6;
+      max-width: 30ch;
+      margin-bottom: var(--space-8);
+    }
+    .band-dark .textlink { color: var(--accent); }
+    .band-dark .textlink:hover { border-bottom-color: var(--accent); }
+
+    /* ── 项目：细顶线卡片网格（仿 News 栅格）── */
+    .cards {
+      margin-top: var(--space-10);
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: var(--space-8);
+    }
+    .card {
+      border-top: 1px solid var(--ink);
+      padding-top: var(--space-5);
+      display: flex; flex-direction: column; gap: var(--space-3);
+      transition: transform var(--duration-normal) var(--ease-default);
+    }
+    .card:hover { transform: translateY(-3px); }
+    .card .meta {
       font-family: var(--font-mono);
       font-size: 0.72rem;
-      letter-spacing: 0.08em;
-      color: var(--ink-faint);
-      flex-shrink: 0;
+      letter-spacing: 0.1em;
+      color: var(--faint);
     }
-    .projects .arrow {
-      font-family: var(--font-mono);
-      color: var(--accent);
-      flex-shrink: 0;
+    .card h3 {
+      font-family: var(--font-sans);
+      font-weight: 600;
+      font-size: 1.05rem;
+      color: var(--ink);
     }
+    .card p { color: var(--dim); font-size: 0.92rem; line-height: 1.75; flex: 1; }
+    .card .textlink { align-self: flex-start; }
 
-    /* ── 贡献图档案框 ── */
-    .figure {
-      background: var(--bg-2);
-      border: 1px solid var(--line);
+    /* ── 贡献图 ── */
+    .chart-panel {
+      margin-top: var(--space-10);
+      background: var(--panel);
+      border: 1px solid var(--line-soft);
+      border-radius: var(--radius);
       padding: var(--space-4);
     }
-    .chart-inset {
-      background: #EAE3D2;
-      padding: var(--space-3);
-    }
-    .chart-inset img { width: 100%; height: auto; }
-    .figure__caption {
+    .chart-panel img { width: 100%; height: auto; border-radius: 4px; }
+    .figure-caption {
       margin-top: var(--space-3);
       font-family: var(--font-mono);
-      font-size: 0.75rem;
-      color: var(--ink-faint);
+      font-size: 0.72rem;
+      color: var(--faint);
       display: flex; justify-content: space-between; gap: var(--space-4); flex-wrap: wrap;
     }
-    .figure__caption b { color: var(--ink-dim); font-weight: 400; }
+    .figure-caption b { color: var(--dim); font-weight: 400; }
 
-    /* ── LINKS ── */
-    .out-links { display: flex; gap: var(--space-3); flex-wrap: wrap; }
-    .out-link {
-      font-family: var(--font-mono);
-      font-size: 0.875rem;
-      color: var(--ink-dim);
-      padding: var(--space-3) var(--space-5);
-      border: 1px solid var(--line);
-      transition: color var(--duration-normal) var(--ease-default),
-                  border-color var(--duration-normal) var(--ease-default);
-    }
-    .out-link:hover { color: var(--accent); border-color: var(--accent); }
-
-    /* ── FOOTER ── */
+    /* ── FOOTER（仿多栏链接页脚）── */
     footer {
-      padding-top: var(--space-8);
+      margin-top: var(--space-24);
       border-top: 1px solid var(--line);
-      display: flex; align-items: center; justify-content: space-between;
-      gap: var(--space-4); flex-wrap: wrap;
-      font-family: var(--font-mono);
-      font-size: 0.8rem;
-      color: var(--ink-faint);
+      background: var(--bg);
+      padding: var(--space-16) 0 var(--space-10);
     }
-    footer a { color: var(--accent); }
-    footer a:hover { text-decoration: underline; text-underline-offset: 4px; }
+    .footer__grid {
+      display: grid;
+      grid-template-columns: 2fr 1fr 1fr 1fr;
+      gap: var(--space-10);
+    }
+    .footer__brand p {
+      font-family: var(--font-serif);
+      font-size: 1.1rem;
+      line-height: 1.6;
+      color: var(--ink);
+      max-width: 22ch;
+    }
+    .footer__brand b { color: var(--accent); font-weight: 600; }
+    .footer__col h4 {
+      font-family: var(--font-mono);
+      font-size: 0.72rem;
+      letter-spacing: 0.1em;
+      color: var(--faint);
+      margin-bottom: var(--space-4);
+      font-weight: 400;
+    }
+    .footer__col ul { list-style: none; }
+    .footer__col li { margin-bottom: var(--space-3); }
+    .footer__col a {
+      font-size: 0.9rem;
+      color: var(--dim);
+      transition: color var(--duration-normal) ease;
+    }
+    .footer__col a:hover { color: var(--ink); }
+    .footer__bottom {
+      margin-top: var(--space-16);
+      padding-top: var(--space-6);
+      border-top: 1px solid var(--line-soft);
+      display: flex; justify-content: space-between; gap: var(--space-4); flex-wrap: wrap;
+      font-family: var(--font-mono);
+      font-size: 0.75rem;
+      color: var(--faint);
+    }
 
-    @media (max-width: 640px) {
-      .hero { padding-inline: var(--space-5); }
-      .projects a { flex-wrap: wrap; gap: var(--space-2); }
-      .projects .name { min-width: 0; }
+    @media (max-width: 800px) {
+      .featured { grid-template-columns: 1fr; }
+      .footer__grid { grid-template-columns: 1fr 1fr; }
+      .nav__links { gap: var(--space-4); }
+    }
+    @media (max-width: 540px) {
+      .footer__grid { grid-template-columns: 1fr; }
     }
   </style>
 </head>
@@ -393,130 +383,156 @@
 
 <!-- NAV -->
 <nav class="nav">
-  <a class="nav__brand" href="/">DNT_OF<b>_</b></a>
+  <a class="nav__brand" href="/">DNT_OF<b>\</b></a>
   <div class="nav__links">
-    <a class="nav__link" href="/platform/">平台介绍</a>
-    <a class="nav__link" href="/dnt-118/">DNT-118 组织</a>
+    <a href="/platform/">平台</a>
+    <a href="/dnt-118/">DNT-118</a>
+    <a href="https://github.com/DNTOF" target="_blank">GitHub ↗</a>
+    <a href="https://afdian.com/a/DNT_OF" target="_blank">爱发电</a>
   </div>
 </nav>
 
-<div class="page">
+<main class="wrap">
 
   <!-- HERO -->
-  <header class="hero ticks reveal">
-    <p class="hero__meta">
-      <span>FIELD LOG <b>//</b> 个人档案</span>
-      <span>SUBJECT: DNT_OF</span>
+  <header class="hero reveal">
+    <h1>围绕 SCP:SL 服务器生态的<br /><em>插件、数据与工具。</em></h1>
+    <p class="hero__sub">
+      DNT_OF —— 高中生，正在自学 C# 与 Python。为 SCP: Secret Laboratory 服务器写插件，
+      把游戏世界的实时数据变成可用的产品。
     </p>
-    <div class="hero__brand">
-      <img class="hero__avatar" src="https://avatars.githubusercontent.com/u/183398652?v=4" alt="DNT_OF" onerror="this.style.opacity='.3'" />
-      <h1 class="hero__title">DNT<span>_</span>OF</h1>
-    </div>
-    <p class="hero__intro">
-      高中生，正在自学 C# 与 Python。围绕 SCP: Secret Laboratory 服务器生态构建工具链。
-    </p>
-    <div class="hero__tags">
-      <span>C#</span>
-      <span>PYTHON</span>
-      <span>.NET</span>
-      <span>EXILED</span>
-      <span>ASTRBOT</span>
-      <span>SCP:SL</span>
+    <div class="hero__cta">
+      <a class="btn btn--primary" href="/platform/">查看平台介绍</a>
+      <a class="btn btn--ghost" href="https://github.com/DNTOF" target="_blank">GitHub ↗</a>
     </div>
   </header>
 
-  <!-- FEATURED -->
+  <!-- FEATURED：左文右码 -->
   <section class="section reveal">
-    <div class="featured ticks">
-      <p class="featured__label">01 · 重点项目</p>
-      <h2 class="featured__title">
-        <a href="https://github.com/DNTOF/SLDataAPI" target="_blank">SLDataAPI</a>
-      </h2>
-      <p class="featured__desc">
-        面向 astrbot_plugin_sl_query 和 FDC 控制台的 EXILED 服务端信息提供与服务器控制插件。运行于 SCP:SL EXILED 服务端，通过 HTTP API 实时暴露服务器状态——在线玩家、回合信息、核弹状态、阵营分布等，为前端查询工具和控制台提供统一的数据源。
-      </p>
-      <div class="featured__tech">
-        <span>C#</span>
-        <span>EXILED 9.x</span>
-        <span>v2.3.0</span>
+    <div class="section-label">FEATURED · 重点项目</div>
+    <div class="featured">
+      <div>
+        <h2 class="featured__name"><a href="https://github.com/DNTOF/SLDataAPI" target="_blank">SLDataAPI</a></h2>
+        <p class="featured__desc">
+          面向 astrbot_plugin_sl_query 和 FDC 控制台的 EXILED 服务端信息提供与服务器控制插件。
+          通过 HTTP API 实时暴露服务器状态——在线玩家、回合信息、核弹状态、阵营分布，
+          为前端查询工具和控制台提供统一的数据源。
+        </p>
+        <ul class="featured__list">
+          <li>多源数据聚合：玩家 / 回合 / 服务器 / 核弹 / 阵营</li>
+          <li>HTTP API 实时查询，低延迟推送</li>
+          <li>支持 FDC 控制台远程服务器控制</li>
+        </ul>
+        <div class="featured__links">
+          <a class="textlink" href="/platform/">平台介绍 →</a>
+          <a class="textlink" href="https://github.com/DNTOF/SLDataAPI" target="_blank">查看项目 →</a>
+        </div>
       </div>
-      <ul class="featured__list">
-        <li><span class="num">01</span>多源数据聚合——玩家 / 回合 / 服务器 / 核弹 / 阵营</li>
-        <li><span class="num">02</span>HTTP API 实时查询，低延迟推送</li>
-        <li><span class="num">03</span>支持 FDC 控制台远程服务器控制</li>
-        <li><span class="num">04</span>与查询插件双源体系无缝协作</li>
-      </ul>
-      <div class="featured__links">
-        <a href="/platform/">平台介绍 →</a>
-        <a href="https://github.com/DNTOF/SLDataAPI" target="_blank">查看项目 →</a>
+      <div>
+        <div class="codecard">
+          <code><span class="c"># GET /api/v1/round/status</span>
+{
+  <span class="k">"success"</span>: <span class="s">true</span>,
+  <span class="k">"round"</span>: {
+    <span class="k">"state"</span>:   <span class="s">"ongoing"</span>,
+    <span class="k">"duration"</span>: <span class="s">1284</span>,
+    <span class="k">"players"</span>:  <span class="s">17</span>
+  },
+  <span class="k">"warhead"</span>: <span class="s">"armed"</span>
+}</code>
+          <span class="codecard__badge">v2.3.0 · EXILED 9.x</span>
+        </div>
       </div>
+    </div>
+  </section>
+
+  <!-- 暗色陈述带：DNT-118 -->
+  <section class="band-dark">
+    <div class="wrap">
+      <div class="section-label">ORGANIZATION · 开发组织</div>
+      <p class="lede">几个 SCP:SL 服务器的玩家凑起来的开发小组——服务器缺什么工具，就写什么。</p>
+      <a class="textlink" href="/dnt-118/">了解 DNT-118 →</a>
     </div>
   </section>
 
   <!-- PROJECTS -->
   <section class="section reveal">
-    <div class="section-label">02 · 项目列表</div>
-    <ul class="projects">
-      <li>
-        <a href="https://github.com/DNTOF/astrbot_plugin_sl_query" target="_blank">
-          <span class="name">astrbot_plugin_sl_query</span>
-          <span class="desc">SCP:SL 服务器查询 AstrBot 插件，官方 API + EXILED 实时数据双源查询，多服务器绑定与多会话隔离。</span>
-          <span class="lang">PYTHON</span>
-          <span class="arrow">→</span>
-        </a>
-      </li>
-      <li>
-        <a href="https://github.com/DNTOF/SLAgent" target="_blank">
-          <span class="name">SLAgent</span>
-          <span class="desc">SCP:SL × AI 辅助插件 (EXILED)，在游戏中使用自然语言管理服务器，支持上下文记忆与白名单控制。</span>
-          <span class="lang">C#</span>
-          <span class="arrow">→</span>
-        </a>
-      </li>
-      <li>
-        <a href="https://github.com/DNTOF/astrbot_plugin_adsb_monitor" target="_blank">
-          <span class="name">astrbot_plugin_adsb_monitor</span>
-          <span class="desc">连接本地 Dump1090 JSON 输出，实时解析并推送 ADS-B 飞机信息。</span>
-          <span class="lang">PYTHON</span>
-          <span class="arrow">→</span>
-        </a>
-      </li>
-    </ul>
+    <div class="section-label">PROJECTS · 项目</div>
+    <h2 class="section-title">从需求里长出来的项目。</h2>
+    <div class="cards">
+      <article class="card">
+        <span class="meta">PYTHON · ASTRBOT</span>
+        <h3>astrbot_plugin_sl_query</h3>
+        <p>SCP:SL 服务器查询 AstrBot 插件，官方 API + EXILED 实时数据双源查询，多服务器绑定与多会话隔离。</p>
+        <a class="textlink" href="https://github.com/DNTOF/astrbot_plugin_sl_query" target="_blank">了解更多 →</a>
+      </article>
+      <article class="card">
+        <span class="meta">C# · EXILED</span>
+        <h3>SLAgent</h3>
+        <p>SCP:SL × AI 辅助插件，在游戏中使用自然语言管理服务器，支持上下文记忆与白名单控制。</p>
+        <a class="textlink" href="https://github.com/DNTOF/SLAgent" target="_blank">了解更多 →</a>
+      </article>
+      <article class="card">
+        <span class="meta">PYTHON · ADS-B</span>
+        <h3>astrbot_plugin_adsb_monitor</h3>
+        <p>连接本地 Dump1090 JSON 输出，实时解析并推送 ADS-B 飞机信息，写给同样是航空爱好者的你。</p>
+        <a class="textlink" href="https://github.com/DNTOF/astrbot_plugin_adsb_monitor" target="_blank">了解更多 →</a>
+      </article>
+    </div>
   </section>
 
   <!-- CONTRIBUTIONS -->
   <section class="section reveal">
-    <div class="section-label">03 · 贡献记录</div>
-    <figure class="figure ticks">
-      <div class="chart-inset">
-        <img src="https://ghchart.rshah.org/DNTOF"
-             alt="DNT_OF GitHub contribution graph"
-             loading="lazy" />
-      </div>
-      <figcaption class="figure__caption">
-        <b>FIG.01 — 过去一年的 GitHub 贡献</b>
-        <span>SOURCE: GHCHART.RSHAH.ORG</span>
-      </figcaption>
-    </figure>
-    <p style="margin-top: var(--space-4)">
-      <a class="out-link" href="https://github.com/DNTOF" target="_blank">查看完整主页 →</a>
-    </p>
-  </section>
-
-  <!-- LINKS -->
-  <section class="section reveal">
-    <div class="section-label">04 · 链接</div>
-    <div class="out-links">
-      <a class="out-link" href="https://github.com/DNTOF" target="_blank">GITHUB</a>
-      <a class="out-link" href="https://afdian.com/a/DNT_OF" target="_blank">爱发电</a>
+    <div class="section-label">CONTRIBUTIONS · 贡献记录</div>
+    <h2 class="section-title">过去一年的提交足迹。</h2>
+    <div class="chart-panel">
+      <img src="https://ghchart.rshah.org/DNTOF"
+           alt="DNT_OF GitHub contribution graph"
+           loading="lazy" />
+    </div>
+    <div class="figure-caption">
+      <b>FIG.01 — GITHUB CONTRIBUTIONS</b>
+      <span>SOURCE: GHCHART.RSHAH.ORG</span>
     </div>
   </section>
 
-  <footer>
-    <span>© <span id="year"></span> DNT_OF · 高中生一枚，代码爱好者</span>
-    <a href="https://github.com/DNTOF" target="_blank">github.com/DNTOF →</a>
-  </footer>
-</div>
+</main>
+
+<!-- FOOTER -->
+<footer>
+  <div class="wrap">
+    <div class="footer__grid">
+      <div class="footer__brand">
+        <p>为 SCP:SL 社区服务器而写的工具，<b>从源码视角讲述。</b></p>
+      </div>
+      <div class="footer__col">
+        <h4>站点</h4>
+        <ul>
+          <li><a href="/platform/">平台介绍</a></li>
+          <li><a href="/dnt-118/">DNT-118 组织</a></li>
+        </ul>
+      </div>
+      <div class="footer__col">
+        <h4>项目</h4>
+        <ul>
+          <li><a href="https://github.com/DNTOF/SLDataAPI" target="_blank">SLDataAPI</a></li>
+          <li><a href="https://github.com/DNTOF" target="_blank">GitHub · DNT_OF</a></li>
+        </ul>
+      </div>
+      <div class="footer__col">
+        <h4>支持</h4>
+        <ul>
+          <li><a href="https://afdian.com/a/DNT_OF" target="_blank">爱发电</a></li>
+          <li><a href="https://space.bilibili.com/3493125592975851" target="_blank">哔哩哔哩</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer__bottom">
+      <span>© <span id="year"></span> DNT_OF\</span>
+      <span>dntof.com</span>
+    </div>
+  </div>
+</footer>
 
 <script>
   document.getElementById('year').textContent = new Date().getFullYear();

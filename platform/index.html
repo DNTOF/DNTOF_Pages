@@ -7,26 +7,26 @@
 <meta name="description" content="SLDataAPI 与 Foundation Console：为 SCP:SL 服务器构建的开源管理生态——游戏内插件与自托管控制台，从源码视角讲述。" />
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-<link href="https://fonts.googleapis.com/css2?family=Saira+Stencil+One&family=ZCOOL+QingKe+HuangYou&family=Noto+Serif+SC:wght@400;600&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet" />
+<link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:opsz,wght@8..60,400;8..60,600&family=Archivo:wght@400;500;600&family=Noto+Serif+SC:wght@600&family=Noto+Sans+SC:wght@400;500&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet" />
 <style>
-/* ===== Token（观测站档案 · 与全站一致）===== */
+/* ===== Token（Anthropic 高仿 · 与全站一致）===== */
 :root {
-  --bg-base: #0C0B09;
-  --bg-raised: #14120E;
-  --bg-overlay: #1A1813;
-  --bg-inverted: #14120E;
-  --text-primary: #EAE3D2;
-  --text-secondary: #A69D87;
-  --text-muted: #6B6455;
-  --text-inverted: #141413;
-  --text-inverted-dim: #C9C2B0;
-  --border-default: rgba(234, 227, 210, 0.22);
-  --border-subtle: rgba(234, 227, 210, 0.09);
-  --accent: #E5703C;
-  --accent-deep: #E5703C;
-  --font-display: 'ZCOOL QingKe HuangYou', 'Noto Serif SC', serif;
-  --font-heading: 'ZCOOL QingKe HuangYou', 'Noto Serif SC', sans-serif;
-  --font-body: 'Noto Serif SC', serif;
+  --bg-base: #F0EEE6;
+  --bg-raised: #FAF9F5;
+  --bg-overlay: #F0EEE6;
+  --bg-inverted: #191919;
+  --text-primary: #191919;
+  --text-secondary: #6E6A5E;
+  --text-muted: #A5A093;
+  --text-inverted: #FAF9F5;
+  --text-inverted-dim: #B8B4A8;
+  --border-default: #DAD6CA;
+  --border-subtle: #E5E1D5;
+  --accent: #CC785C;
+  --accent-deep: #CC785C;
+  --font-display: 'Source Serif 4', 'Noto Serif SC', serif;
+  --font-heading: 'Archivo', 'Noto Sans SC', sans-serif;
+  --font-body: 'Archivo', 'Noto Sans SC', sans-serif;
   --font-mono: 'JetBrains Mono', monospace;
   --duration-fast: 150ms;
   --duration-normal: 250ms;
@@ -39,31 +39,16 @@ body {
   font-family: var(--font-body);
   background: var(--bg-base);
   color: var(--text-primary);
-  line-height: 1.9;
+  line-height: 1.75;
   font-size: 16px;
   -webkit-font-smoothing: antialiased;
   overflow-x: hidden;
 }
-/* ===== 背景氛围：坐标纸网格 + 角部光晕（全站一致）===== */
-body::before {
-  content: ''; position: fixed; inset: 0; pointer-events: none; z-index: 0;
-  background-image:
-    linear-gradient(var(--border-subtle) 1px, transparent 1px),
-    linear-gradient(90deg, var(--border-subtle) 1px, transparent 1px);
-  background-size: 56px 56px;
-}
-body::after {
-  content: ''; position: fixed; inset: 0; pointer-events: none; z-index: 0;
-  background:
-    radial-gradient(ellipse 55% 40% at 12% 0%, rgba(229,112,60,0.07) 0%, transparent 60%),
-    radial-gradient(ellipse 50% 45% at 100% 100%, rgba(234,227,210,0.04) 0%, transparent 55%);
-}
-body > * { position: relative; z-index: 1; }
 @view-transition { navigation: auto; }
-::selection { background: var(--accent); color: #141413; }
+::selection { background: var(--accent); color: #FAF9F5; }
 a { color: var(--accent); text-decoration: none; }
 a:hover { text-decoration: underline; text-underline-offset: 3px; }
-h1, h2, h3 { font-family: var(--font-heading); font-weight: 400; line-height: 1.3; }
+h1, h2, h3 { font-family: var(--font-heading); font-weight: 500; line-height: 1.3; }
 .mono { font-family: var(--font-mono); }
 
 /* ===== 导航 ===== */
@@ -75,9 +60,9 @@ h1, h2, h3 { font-family: var(--font-heading); font-weight: 400; line-height: 1.
   background: color-mix(in srgb, var(--bg-base) 82%, transparent);
   border-bottom: 1px solid var(--border-subtle);
 }
-.nav__brand { display: flex; align-items: center; gap: 10px; font-family: var(--font-mono); font-weight: 700; font-size: 14px; color: var(--text-primary); text-decoration: none; }
+.nav__brand { display: flex; align-items: center; gap: 10px; font-family: var(--font-heading); font-weight: 600; font-size: 16px; color: var(--text-primary); text-decoration: none; }
 .nav__brand:hover { text-decoration: none; }
-.nav__dot { width: 8px; height: 8px; border-radius: 0; background: var(--accent); display: inline-block; }
+.nav__brand b { color: var(--accent); font-weight: 600; }
 .nav__links { display: flex; gap: 24px; font-family: var(--font-mono); font-size: 13px; color: var(--text-secondary); }
 .nav__links a { color: var(--text-secondary); }
 .nav__links a:hover { color: var(--text-primary); text-decoration: none; }
@@ -118,8 +103,8 @@ h1, h2, h3 { font-family: var(--font-heading); font-weight: 400; line-height: 1.
   text-decoration: none;
 }
 .btn:hover { text-decoration: none; transform: translateY(-1px); }
-.btn--primary { background: var(--accent); color: #141413; }
-.btn--primary:hover { box-shadow: 0 4px 18px rgba(229, 112, 60, 0.35); }
+.btn--primary { background: var(--bg-inverted); color: var(--text-inverted); }
+.btn--primary:hover { box-shadow: 0 6px 20px rgba(25, 25, 25, 0.22); }
 .btn--ghost { border: 1px solid var(--border-default); color: var(--text-primary); }
 .btn--ghost:hover { border-color: var(--text-primary); }
 
@@ -127,10 +112,10 @@ h1, h2, h3 { font-family: var(--font-heading); font-weight: 400; line-height: 1.
 .codecard {
   position: relative;
   background: var(--bg-inverted);
-  border: 1px solid var(--border-subtle);
-  border-radius: 4px;
+  border: 1px solid rgba(250, 249, 245, 0.08);
+  border-radius: 12px;
   padding: 28px 0 24px;
-  box-shadow: 0 24px 60px rgba(0, 0, 0, 0.4);
+  box-shadow: 0 24px 60px rgba(25, 25, 25, 0.2);
   transform: rotate(1.2deg);
 }
 .codecard::before {
@@ -160,19 +145,18 @@ h1, h2, h3 { font-family: var(--font-heading); font-weight: 400; line-height: 1.
 /* ===== 区块通用 ===== */
 .section { padding: 96px clamp(20px, 5vw, 64px); }
 .wrap { max-width: 920px; margin: 0 auto; }
-.section--dark { background: var(--bg-inverted); color: var(--text-primary); border-top: 1px solid var(--border-subtle); border-bottom: 1px solid var(--border-subtle); }
+.section--dark { background: var(--bg-inverted); color: var(--text-inverted); border-top: none; border-bottom: none; }
 .section__label {
   font-family: var(--font-mono); font-size: 13px; letter-spacing: 0.02em;
   color: var(--accent); margin-bottom: 20px;
 }
-.section__label::before { content: '/ '; color: var(--text-muted); }
 .section--dark .section__label { color: var(--accent); }
 .section__title {
   font-family: var(--font-display); font-weight: 400;
   font-size: clamp(28px, 3.6vw, 42px); max-width: 24ch; letter-spacing: 0;
 }
 .section__lede { margin-top: 18px; max-width: 62ch; color: var(--text-secondary); font-size: 16.5px; }
-.section--dark .section__lede { color: var(--text-secondary); }
+.section--dark .section__lede { color: var(--text-inverted-dim); }
 
 /* ===== 架构（两端） ===== */
 .arch { display: grid; grid-template-columns: 1fr 1fr; gap: 40px; margin-top: 64px; }
@@ -182,7 +166,7 @@ h1, h2, h3 { font-family: var(--font-heading); font-weight: 400; line-height: 1.
   border-radius: 12px; padding: 36px 32px;
   transition: border-color var(--duration-normal), transform var(--duration-normal) var(--ease-default);
 }
-.arch__card:hover { border-color: rgba(229, 112, 60, 0.5); transform: translateY(-3px); }
+.arch__card:hover { border-color: rgba(204, 120, 92, 0.55); transform: translateY(-3px); }
 .arch__kicker { font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.2em; text-transform: uppercase; color: var(--accent); }
 .arch__name { font-family: var(--font-display); font-size: 25px; margin-top: 10px; }
 .arch__desc { margin-top: 14px; color: var(--text-inverted-dim); font-size: 14.5px; }
@@ -197,7 +181,7 @@ h1, h2, h3 { font-family: var(--font-heading); font-weight: 400; line-height: 1.
   font-family: var(--font-mono); font-size: 12px; color: var(--accent);
   margin-top: 26px; letter-spacing: 0.15em;
 }
-.arch__line { height: 1px; flex: 1; max-width: 120px; background: linear-gradient(90deg, transparent, rgba(229,112,60,0.6), transparent); }
+.arch__line { height: 1px; flex: 1; max-width: 120px; background: linear-gradient(90deg, transparent, rgba(204,120,92,0.6), transparent); }
 
 /* ===== 能力网格 ===== */
 .cap { display: grid; grid-template-columns: repeat(2, 1fr); gap: 20px; margin-top: 64px; }
@@ -223,8 +207,8 @@ h1, h2, h3 { font-family: var(--font-heading); font-weight: 400; line-height: 1.
 }
 .quote__text {
   font-family: var(--font-display); font-style: normal;
-  font-size: clamp(20px, 2.6vw, 30px); color: var(--text-primary);
-  max-width: 34ch; line-height: 1.7;
+  font-size: clamp(20px, 2.6vw, 30px); color: var(--text-inverted);
+  max-width: 34ch; line-height: 1.6;
 }
 .quote__src { margin-top: 18px; font-family: var(--font-mono); font-size: 12px; color: var(--text-inverted-dim); }
 
@@ -243,8 +227,8 @@ h1, h2, h3 { font-family: var(--font-heading); font-weight: 400; line-height: 1.
 .cta__sub { margin: 18px auto 0; color: var(--text-secondary); max-width: 50ch; }
 .cta .btn { margin-top: 36px; }
 .footer {
-  background: var(--bg-inverted); color: var(--text-muted);
-  border-top: 1px solid var(--border-subtle);
+  background: var(--bg-base); color: var(--text-muted);
+  border-top: 1px solid var(--border-default);
   padding: 56px clamp(20px, 5vw, 64px);
   display: flex; justify-content: space-between; flex-wrap: wrap; gap: 20px;
   font-family: var(--font-mono); font-size: 12.5px;
@@ -307,7 +291,7 @@ h1, h2, h3 { font-family: var(--font-heading); font-weight: 400; line-height: 1.
 <body>
 
 <nav class="nav">
-  <a class="nav__brand" href="https://dntof.com"><span class="nav__dot"></span>DNT_OF</a>
+  <a class="nav__brand" href="/">DNT_OF<b>\</b></a>
   <div class="nav__links">
     <a href="#arch">架构</a>
     <a href="#cap">能力</a>
@@ -320,7 +304,7 @@ h1, h2, h3 { font-family: var(--font-heading); font-weight: 400; line-height: 1.
 <!-- ================= HERO ================= -->
 <header class="hero">
   <div class="reveal on">
-    <div class="hero__eyebrow">FIELD LOG // SCP:SL 服务器管理生态</div>
+    <div class="hero__eyebrow">SCP:SL 服务器管理生态</div>
     <h1 class="hero__title">让服务器，<br /><em>被优雅地管理。</em></h1>
     <p class="hero__sub">
       SLDataAPI 与 Foundation Console —— 一套从游戏内插件到自托管控制台的管理生态。
