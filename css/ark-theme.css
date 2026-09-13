@@ -1,31 +1,118 @@
 /*
- * Ark UI theme — family: ark · depth: complex
- * Evidence: ak.hypergryph.com official CSS (#fff/#000 dominance, #18d1ff signal, rgba(0,0,0,.5) overlays)
+ * Ark UI theme — family switchable · depth: complex
+ * Evidence: ak.hypergryph.com official production CSS
+ *   colors: #fff ×19, #000 ×14, #18d1ff ×8 (+#19d1ff/#06bbff gradient variants),
+ *   grays #181818/#232323/#4f4f4f/#929292/#c4c2c2/#e8e6e3, overlays rgba(0,0,0,.5/.8/.9)
+ *   radius: 8px main; fonts: no font-family declared on official site (system default),
+ *   game client uses Source Han Sans (=Noto Sans SC, OFL) + Bender (Latin; local() first, Oswald proxy).
  * Original clean-room implementation per ark-ui-skill source rules.
  */
-:root {
-  /* ===== ark 家族 token（证据：ak.hypergryph.com 官方 CSS）===== */
-  --ark-ink: #080a0b;
-  --ark-paper: #f4f6f6;
+
+/* ===== 家族 token（组件只引用变量；切换 html[data-ark-theme] 即换肤）===== */
+[data-ark-theme="ark"] {
+  --ark-ink: #000;
+  --ark-paper: #fff;
   --ark-signal: #18d1ff;
-  --ark-state: #c8eb21;      /* 仅用于在线/成功状态 */
-  --ark-muted: #8d9396;
-  --ark-panel: rgba(8, 10, 11, 0.82);
-  --ark-line: rgba(244, 246, 246, 0.16);
-  --ark-line-soft: rgba(244, 246, 246, 0.08);
-  --ark-line-strong: rgba(244, 246, 246, 0.4);
+  --ark-signal-deep: #06bbff;
+  --ark-on-signal: #000;
+  --ark-state: #c8eb21;
+  --ark-muted: #929292;
+  --ark-faint: #4f4f4f;
+  --ark-surface: #181818;
+  --ark-panel: rgba(0, 0, 0, 0.82);
+  --ark-terminal: rgba(0, 0, 0, 0.35);
+  --ark-line: rgba(255, 255, 255, 0.16);
+  --ark-line-soft: rgba(255, 255, 255, 0.08);
+  --ark-line-strong: rgba(255, 255, 255, 0.4);
+  --ark-radius: 8px;
+  /* 游戏客户端 Latin 显示字体为 Bender；本地装有 Bender 时直接生效，否则用 Oswald 代理 */
+  --ark-display: 'Bender', 'Oswald', 'Roboto Condensed', 'Arial Narrow', sans-serif;
+  /* CJK 即思源黑体（Source Han Sans = Noto Sans SC，与游戏客户端同源设计）；正文默认栈与官网一致 */
+  --ark-sans: 'Noto Sans SC', -apple-system, 'Segoe UI', Roboto, 'PingFang SC', 'Microsoft YaHei', sans-serif;
+}
 
-  /* ===== 深度变量（complex）===== */
-  --ark-stage-opacity: 0.68;
-  --ark-stage-layers: 4;
-  --ark-motion-reveal: 650ms;
+[data-ark-theme="endfield"] {
+  --ark-ink: #f2f2f0;
+  --ark-paper: #191919;
+  --ark-signal: #fffa00;
+  --ark-signal-deep: #e6e400;
+  --ark-on-signal: #191919;
+  --ark-state: #00ffa2;
+  --ark-muted: #6e6e6a;
+  --ark-faint: #b5b5b0;
+  --ark-surface: #e9e9e6;
+  --ark-panel: rgba(255, 255, 255, 0.72);
+  --ark-terminal: rgba(25, 25, 25, 0.05);
+  --ark-line: rgba(25, 25, 25, 0.18);
+  --ark-line-soft: rgba(25, 25, 25, 0.09);
+  --ark-line-strong: rgba(25, 25, 25, 0.45);
+  --ark-radius: 2px;
+  --ark-display: 'Oswald', 'Roboto Condensed', 'Arial Narrow', sans-serif;
+  --ark-sans: 'Space Grotesk', 'Noto Sans SC', 'PingFang SC', 'Microsoft YaHei', sans-serif;
+}
 
-  --font-display: 'Roboto Condensed', 'Arial Narrow', 'Noto Sans SC', sans-serif;
-  --font-tech: 'Space Grotesk', 'Noto Sans SC', sans-serif;
-  --font-cjk: 'Noto Sans SC', 'PingFang SC', 'Microsoft YaHei', sans-serif;
+[data-ark-theme="exa"] {
+  --ark-ink: #080914;
+  --ark-paper: #f3f2ef;
+  --ark-signal: #46f6e6;
+  --ark-signal-deep: #2ed4c6;
+  --ark-on-signal: #080914;
+  --ark-state: #925dff;
+  --ark-muted: #8b8fa3;
+  --ark-faint: #4a4d63;
+  --ark-surface: #101223;
+  --ark-panel: rgba(8, 9, 20, 0.82);
+  --ark-terminal: rgba(0, 0, 0, 0.35);
+  --ark-line: rgba(243, 242, 239, 0.16);
+  --ark-line-soft: rgba(243, 242, 239, 0.08);
+  --ark-line-strong: rgba(243, 242, 239, 0.4);
+  --ark-radius: 4px;
+  --ark-display: 'Source Serif 4', 'Noto Serif SC', Georgia, serif;
+  --ark-sans: 'Noto Sans SC', -apple-system, 'Segoe UI', Roboto, 'PingFang SC', 'Microsoft YaHei', sans-serif;
+}
+
+[data-ark-theme="popucom"] {
+  --ark-ink: #fffdf4;
+  --ark-paper: #141414;
+  --ark-signal: #ffcc1a;
+  --ark-signal-deep: #f0b800;
+  --ark-on-signal: #141414;
+  --ark-state: #3994ff;
+  --ark-muted: #6d6a5e;
+  --ark-faint: #b3b0a2;
+  --ark-surface: #f5f2e4;
+  --ark-panel: rgba(255, 253, 244, 0.85);
+  --ark-terminal: rgba(20, 20, 20, 0.05);
+  --ark-line: rgba(20, 20, 20, 0.18);
+  --ark-line-soft: rgba(20, 20, 20, 0.09);
+  --ark-line-strong: rgba(20, 20, 20, 0.45);
+  --ark-radius: 999px;
+  --ark-display: 'Noto Sans SC', -apple-system, 'Segoe UI', sans-serif;
+  --ark-sans: 'Noto Sans SC', -apple-system, 'Segoe UI', Roboto, 'PingFang SC', 'Microsoft YaHei', sans-serif;
+}
+
+[data-ark-theme="corporate"] {
+  --ark-ink: #050505;
+  --ark-paper: #f3f3f3;
+  --ark-signal: #f3ff00;
+  --ark-signal-deep: #d4e000;
+  --ark-on-signal: #050505;
+  --ark-state: #f3ff00;
+  --ark-muted: #9a9a96;
+  --ark-faint: #4a4a48;
+  --ark-surface: #111110;
+  --ark-panel: rgba(5, 5, 5, 0.85);
+  --ark-terminal: rgba(0, 0, 0, 0.4);
+  --ark-line: rgba(243, 243, 243, 0.16);
+  --ark-line-soft: rgba(243, 243, 243, 0.08);
+  --ark-line-strong: rgba(243, 243, 243, 0.4);
+  --ark-radius: 2px;
+  --ark-display: 'Space Grotesk', 'Noto Sans SC', sans-serif;
+  --ark-sans: 'Noto Sans SC', -apple-system, 'Segoe UI', Roboto, 'PingFang SC', 'Microsoft YaHei', sans-serif;
+}
+
+:root {
   --font-mono: 'IBM Plex Mono', Consolas, monospace;
-
-  --radius-fn: 2px;
   --space-2: 8px;
   --space-3: 12px;
   --space-4: 16px;
@@ -43,12 +130,13 @@ html { scroll-behavior: smooth; -webkit-text-size-adjust: 100%; }
 body {
   background: var(--ark-ink);
   color: var(--ark-paper);
-  font-family: var(--font-cjk);
+  font-family: var(--ark-sans);
   font-size: 1rem;
   line-height: 1.8;
   -webkit-font-smoothing: antialiased;
   min-height: 100vh;
   overflow-x: hidden;
+  transition: background-color 0.3s ease, color 0.3s ease;
 }
 
 img { display: block; max-width: 100%; }
@@ -60,7 +148,7 @@ ul, ol { list-style: none; }
   outline-offset: 2px;
 }
 
-::selection { background: var(--ark-signal); color: var(--ark-ink); }
+::selection { background: var(--ark-signal); color: var(--ark-on-signal); }
 
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after {
@@ -72,7 +160,7 @@ ul, ol { list-style: none; }
 
 @view-transition { navigation: auto; }
 
-/* ===== Shell：顶栏 + 左轨 + 主舞台（edge-instrumented grid）===== */
+/* ===== Shell ===== */
 .ark-shell {
   min-height: 100svh;
   display: grid;
@@ -134,12 +222,12 @@ ul, ol { list-style: none; }
   gap: var(--space-4);
   padding: 0 clamp(20px, 3vw, 40px);
   position: sticky; top: 0;
-  background: rgba(8, 10, 11, 0.85);
+  background: color-mix(in srgb, var(--ark-ink) 85%, transparent);
   backdrop-filter: blur(8px);
   z-index: 40;
 }
 .ark-topbar__brand {
-  font-family: var(--font-tech);
+  font-family: var(--ark-display);
   font-weight: 700;
   font-size: 1rem;
   letter-spacing: 0.02em;
@@ -150,11 +238,11 @@ ul, ol { list-style: none; }
   font-size: 0.68rem;
   letter-spacing: 0.12em;
   color: var(--ark-muted);
-  display: none;
 }
+.ark-topbar__right { display: flex; align-items: center; gap: var(--space-6); flex-wrap: wrap; }
 .ark-topbar__links { display: flex; gap: var(--space-6); }
 .ark-topbar__links a {
-  font-family: var(--font-tech);
+  font-family: var(--ark-sans);
   font-size: 0.85rem;
   font-weight: 500;
   letter-spacing: 0.04em;
@@ -168,6 +256,32 @@ ul, ol { list-style: none; }
   border-bottom-color: var(--ark-signal);
 }
 
+/* ── 主题切换（原生 select：键盘/移动端可达）── */
+.ark-themeswitch {
+  display: inline-flex; align-items: center; gap: var(--space-2);
+}
+.ark-themeswitch__label {
+  font-family: var(--font-mono);
+  font-size: 0.62rem;
+  letter-spacing: 0.14em;
+  color: var(--ark-muted);
+}
+.ark-themeswitch select {
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  letter-spacing: 0.06em;
+  color: var(--ark-paper);
+  background: var(--ark-panel);
+  border: 1px solid var(--ark-line);
+  border-radius: var(--ark-radius);
+  padding: 5px 8px;
+  min-height: 32px;
+  cursor: pointer;
+  transition: border-color 0.2s ease;
+}
+.ark-themeswitch select:hover { border-color: var(--ark-signal); }
+.ark-themeswitch select option { background: var(--ark-ink); color: var(--ark-paper); }
+
 /* ── 主舞台 ── */
 .ark-stage { grid-column: 2; min-width: 0; }
 
@@ -176,7 +290,7 @@ ul, ol { list-style: none; }
   padding: 0 clamp(20px, 4vw, 48px);
 }
 
-/* ── HERO：舞台 + 工程・网格 + 裁切大字 ── */
+/* ── HERO ── */
 .hero {
   position: relative;
   min-height: calc(100svh - 3.5rem);
@@ -185,22 +299,20 @@ ul, ol { list-style: none; }
   overflow: hidden;
   border-bottom: 1px solid var(--ark-line);
 }
-/* 层 1：工程网格 */
 .hero::before {
   content: ''; position: absolute; inset: 0;
   background-image:
-    linear-gradient(rgba(244, 246, 246, 0.05) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(244, 246, 246, 0.05) 1px, transparent 1px);
+    linear-gradient(var(--ark-line-soft) 1px, transparent 1px),
+    linear-gradient(90deg, var(--ark-line-soft) 1px, transparent 1px);
   background-size: 4rem 4rem;
-  opacity: var(--ark-stage-opacity);
+  opacity: 0.68;
   pointer-events: none;
 }
-/* 层 2：45° 定向扇区 */
 .hero::after {
   content: ''; position: absolute;
   right: -6%; top: -12%;
   width: 46%; height: 70%;
-  background: linear-gradient(135deg, rgba(24, 209, 255, 0.07), transparent 65%);
+  background: linear-gradient(135deg, color-mix(in srgb, var(--ark-signal) 9%, transparent), transparent 65%);
   clip-path: polygon(20% 0, 100% 0, 100% 80%, 0 100%);
   pointer-events: none;
 }
@@ -217,7 +329,7 @@ ul, ol { list-style: none; }
 .hero__kicker::after { content: ''; width: 48px; height: 1px; background: var(--ark-line-strong); }
 
 .hero__id {
-  font-family: var(--font-display);
+  font-family: var(--ark-display);
   font-weight: 700;
   font-size: clamp(4rem, 14vw, 10.5rem);
   line-height: 0.85;
@@ -258,7 +370,6 @@ ul, ol { list-style: none; }
 
 .hero__cta { margin-top: var(--space-8); display: flex; gap: var(--space-4); flex-wrap: wrap; }
 
-/* 状态条（真实信息）*/
 .hero__status {
   position: relative; z-index: 1;
   max-width: 1160px; margin: var(--space-10) auto 0; width: 100%;
@@ -273,13 +384,14 @@ ul, ol { list-style: none; }
 .hero__status b { color: var(--ark-paper); font-weight: 500; }
 .hero__status .ok { color: var(--ark-state); }
 
-/* ── 按钮arcer：方形 · 左信号条 · 1px 描边 ── */
+/* ── 按钮：方形 · 左信号条 · 1px 描边 ── */
 .btn {
   display: inline-flex; align-items: center; justify-content: center; gap: var(--space-3);
   min-height: 44px;
   padding: var(--space-3) var(--space-6);
   border: 1px solid var(--ark-line-strong);
-  font-family: var(--font-tech);
+  border-radius: var(--ark-radius);
+  font-family: var(--ark-sans);
   font-size: 0.9rem;
   font-weight: 500;
   letter-spacing: 0.06em;
@@ -295,11 +407,11 @@ ul, ol { list-style: none; }
 }
 .btn:hover { border-color: var(--ark-signal); color: var(--ark-signal); }
 .btn:hover::before { transform: scaleY(1); }
-.btn--primary { background: var(--ark-signal); border-color: var(--ark-signal); color: var(--ark-ink); }
+.btn--primary { background: var(--ark-signal); border-color: var(--ark-signal); color: var(--ark-on-signal); }
 .btn--primary::before { background: var(--ark-paper); }
-.btn--primary:hover { background: #5adfff; color: var(--ark-ink); }
+.btn--primary:hover { background: var(--ark-signal-deep); color: var(--ark-on-signal); }
 
-/* ── 区块标题系统 ── */
+/* ── 区块标题 ── */
 .section { padding: var(--space-16) 0 0; }
 .section:last-of-type { padding-bottom: var(--space-16); }
 .section-head { margin-bottom: var(--space-10); }
@@ -312,7 +424,7 @@ ul, ol { list-style: none; }
 }
 .section-head .kicker b { color: var(--ark-signal); font-weight: 500; }
 .section-head h2 {
-  font-family: var(--font-display);
+  font-family: var(--ark-display);
   font-weight: 700;
   font-size: clamp(1.8rem, 4vw, 3rem);
   line-height: 0.95;
@@ -322,7 +434,7 @@ ul, ol { list-style: none; }
   display: flex; align-items: baseline; gap: var(--space-4); flex-wrap: wrap;
 }
 .section-head h2 .zh {
-  font-family: var(--font-cjk);
+  font-family: var(--ark-sans);
   font-size: 0.45em;
   font-weight: 500;
   letter-spacing: 0.3em;
@@ -335,7 +447,8 @@ ul, ol { list-style: none; }
 }
 .section-head .rule::before {
   content: ''; position: absolute; left: 0; top: -1px;
-  width: 64px; height: 3px; background: var(--ark-signal);
+  width: 64px; height: 3px;
+  background: linear-gradient(90deg, var(--ark-signal), var(--ark-signal-deep));
 }
 
 /* ── 技术面板 ── */
@@ -357,11 +470,10 @@ ul, ol { list-style: none; }
 .panel__status { color: var(--ark-muted); }
 .panel__body { padding: var(--space-8) var(--space-6); }
 
-/* FEATURED 双栏 */
 .featured { display: grid; grid-template-columns: minmax(0, 7fr) minmax(0, 5fr); }
 .featured__body { padding: var(--space-8) var(--space-6); }
 .featured__name {
-  font-family: var(--font-display);
+  font-family: var(--ark-display);
   font-weight: 700;
   font-size: clamp(1.8rem, 3.5vw, 2.6rem);
   line-height: 0.95;
@@ -382,12 +494,13 @@ ul, ol { list-style: none; }
 .featured__list li::before { content: '//'; color: var(--ark-signal); font-family: var(--font-mono); font-size: 0.78rem; }
 .featured__links { display: flex; gap: var(--space-4); flex-wrap: wrap; }
 .textlink {
-  font-family: var(--font-tech);
+  font-family: var(--ark-sans);
   font-size: 0.85rem;
   font-weight: 500;
   letter-spacing: 0.05em;
   color: var(--ark-signal);
   border: 1px solid var(--ark-line);
+  border-radius: var(--ark-radius);
   padding: var(--space-2) var(--space-4);
   min-height: 40px;
   display: inline-flex; align-items: center;
@@ -395,8 +508,8 @@ ul, ol { list-style: none; }
 }
 .textlink:hover { border-color: var(--ark-signal); }
 
-/* 终端窗格（Featured 右侧）*/
-.terminal { border-left: 1px solid var(--ark-line); background: rgba(0, 0, 0, 0.35); display: flex; flex-direction: column; }
+/* 终端窗格 */
+.terminal { border-left: 1px solid var(--ark-line); background: var(--ark-terminal); display: flex; flex-direction: column; }
 .terminal__bar {
   padding: var(--space-3) var(--space-5);
   border-bottom: 1px solid var(--ark-line);
@@ -422,7 +535,7 @@ ul, ol { list-style: none; }
 .terminal .s { color: var(--ark-state); }
 .terminal .c { color: var(--ark-muted); }
 
-/* ── 项目新闻列表（category + headline）── */
+/* ── 项目新闻列表 ── */
 .news { border-top: 1px solid var(--ark-line-strong); }
 .news a {
   display: grid;
@@ -433,7 +546,10 @@ ul, ol { list-style: none; }
   border-bottom: 1px solid var(--ark-line);
   transition: background-color 0.2s ease, padding-left 0.25s var(--ease-ark);
 }
-.news a:hover { background: rgba(24, 209, 255, 0.05); padding-left: var(--space-4); }
+.news a:hover {
+  background: color-mix(in srgb, var(--ark-signal) 7%, transparent);
+  padding-left: var(--space-4);
+}
 .news .cat {
   font-family: var(--font-mono);
   font-size: 0.68rem;
@@ -441,7 +557,7 @@ ul, ol { list-style: none; }
   color: var(--ark-signal);
 }
 .news .name {
-  font-family: var(--font-tech);
+  font-family: var(--ark-sans);
   font-weight: 500;
   font-size: 1.05rem;
   color: var(--ark-paper);
@@ -470,7 +586,7 @@ ul, ol { list-style: none; }
 .org::after {
   content: '118';
   position: absolute; right: -0.06em; bottom: -0.28em;
-  font-family: var(--font-display);
+  font-family: var(--ark-display);
   font-weight: 700;
   font-size: clamp(6rem, 18vw, 13rem);
   line-height: 1;
@@ -481,7 +597,7 @@ ul, ol { list-style: none; }
 }
 .org__body { position: relative; z-index: 1; padding: var(--space-10) var(--space-8); max-width: 720px; }
 .org__title {
-  font-family: var(--font-display);
+  font-family: var(--ark-display);
   font-weight: 700;
   font-size: clamp(1.8rem, 4vw, 2.8rem);
   line-height: 0.95;
@@ -497,6 +613,7 @@ ul, ol { list-style: none; }
   background: var(--ark-paper);
   padding: var(--space-4);
   border: 1px solid var(--ark-line);
+  border-radius: var(--ark-radius);
 }
 .chart-inset img { width: 100%; height: auto; }
 .figure-caption {
@@ -544,7 +661,7 @@ ul, ol { list-style: none; }
   color: var(--ark-muted);
 }
 
-/* ── 揭示动效（masked lateral reveal）── */
+/* ── 揭示动效 ── */
 .ark-reveal {
   clip-path: inset(0 100% 0 0);
   transform: translateX(-12px);
@@ -555,7 +672,7 @@ ul, ol { list-style: none; }
   .ark-reveal { clip-path: none; transform: none; transition: none; }
 }
 
-/* ── 响应式重组（portrait 重建，非缩放）── */
+/* ── 响应式重组 ── */
 @media (max-width: 900px), (orientation: portrait) {
   .ark-shell {
     grid-template-columns: 1fr;
@@ -575,7 +692,7 @@ ul, ol { list-style: none; }
   .ark-rail__indices a { border-left: none; border-bottom: 2px solid transparent; flex-direction: row; min-height: 36px; }
   .ark-rail__indices a:hover, .ark-rail__indices a.is-active { border-bottom-color: var(--ark-signal); }
   .ark-rail__foot { display: none; }
-  .ark-topbar { grid-column: 1; grid-row: 2; }
+  .ark-topbar { grid-column: 1; grid-row: 2; flex-wrap: wrap; }
   .ark-stage { grid-column: 1; grid-row: 3; }
   .featured { grid-template-columns: 1fr; }
   .terminal { border-left: none; border-top: 1px solid var(--ark-line); }
@@ -584,7 +701,11 @@ ul, ol { list-style: none; }
   .news .desc { grid-column: 1 / -1; }
   .footer__grid { grid-template-columns: 1fr 1fr; }
 }
+@media (min-width: 901px) {
+  .ark-topbar__meta { display: none; }
+}
 @media (max-width: 560px) {
   .footer__grid { grid-template-columns: 1fr; }
   .ark-topbar__links { gap: var(--space-4); }
+  .ark-themeswitch__label { display: none; }
 }
